@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>phpstorm + xdebug 断点调试 | Rakishly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="环境说明宿主机deepin系统，用的是docker-compose 搭建laravel php.ini 添加 xdebug 模块 下载xdebug模块 首先打印phpinfo() 全选复制到 https:&#x2F;&#x2F;xdebug.org&#x2F;wizard 这个链接的文本域中 并且点击这个按钮生成  点击下载  注：由于我之前下载2.7.1版本的，并且适用php 7.1，固这里不下载2.9  解压并进入xdeb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="phpstorm + xdebug 断点调试">
+<meta property="og:url" content="https://rakishly.github.io/2020/05/19/xdebug/index.html">
+<meta property="og:site_name" content="Rakishly">
+<meta property="og:description" content="环境说明宿主机deepin系统，用的是docker-compose 搭建laravel php.ini 添加 xdebug 模块 下载xdebug模块 首先打印phpinfo() 全选复制到 https:&#x2F;&#x2F;xdebug.org&#x2F;wizard 这个链接的文本域中 并且点击这个按钮生成  点击下载  注：由于我之前下载2.7.1版本的，并且适用php 7.1，固这里不下载2.9  解压并进入xdeb">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/YLQUtpK94R.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/WAtCbkijq7.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/yTd3hTTIV1.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/RGOhxponSN.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/unnb6VaLko.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/c02kNEe9ab.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/Fncjm9wMX6.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/1WEvAQYL8y.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/Kxt1y59lb3.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/vrfB90sabr.png!large">
+<meta property="article:published_time" content="2020-05-19T09:42:36.000Z">
+<meta property="article:modified_time" content="2020-06-19T09:46:06.744Z">
+<meta property="article:author" content="Rakishly">
+<meta property="article:tag" content="xdebug">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.learnku.com/uploads/images/202001/09/26659/YLQUtpK94R.png!large">
+  
+    <link rel="alternate" href="/atom.xml" title="Rakishly" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Rakishly</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://rakishly.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xdebug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/19/xdebug/" class="article-date">
+  <time datetime="2020-05-19T09:42:36.000Z" itemprop="datePublished">2020-05-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      phpstorm + xdebug 断点调试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>宿主机deepin系统，用的是docker-compose 搭建laravel</p>
+<h2 id="php-ini-添加-xdebug-模块"><a href="#php-ini-添加-xdebug-模块" class="headerlink" title="php.ini 添加 xdebug 模块"></a>php.ini 添加 xdebug 模块</h2><ul>
+<li>下载xdebug模块</li>
+<li>首先打印phpinfo() 全选复制到 <a href="http://">https://xdebug.org/wizard</a> 这个链接的文本域中 并且点击这个按钮生成<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/YLQUtpK94R.png!large" alt="phpstrom + docker + xdebug 断点调试"></li>
+</ul>
+<p><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/WAtCbkijq7.png!large" alt="phpstrom + docker + xdebug 断点调试"><br>点击下载</p>
+<blockquote>
+<p>注：由于我之前下载2.7.1版本的，并且适用php 7.1，固这里不下载2.9</p>
+</blockquote>
+<p>解压并进入xdebug目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -xvzf xdebug-2.9.0.tgz</span><br><span class="line">cd xdebug-2.9.0</span><br></pre></td></tr></table></figure>
+<p>编译并生成.so文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">phpize # 生成configure文件</span><br><span class="line">.&#x2F;configure --enable-xdebug # 配置</span><br><span class="line">make &amp;&amp; make install # 编译并生成</span><br></pre></td></tr></table></figure>
+<p>复制 xdebug.so模块到指定目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd modules&#x2F; </span><br><span class="line">mkdir &#x2F;usr&#x2F;local&#x2F;bin&#x2F;modules </span><br><span class="line">cp xdebug.so &#x2F;usr&#x2F;local&#x2F;bin&#x2F;modules</span><br></pre></td></tr></table></figure>
+<p>找到 <strong>php.ini</strong> 文件 在最后插入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[xdebug]</span><br><span class="line">zend_extension&#x3D;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;modules&#x2F;xdebug.so</span><br><span class="line">xdebug.profiler_enable&#x3D;on #开启性能监控（一般在正式环境不建议开启）</span><br><span class="line">xdebug.trace_output_dir&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;php&#x2F;xdebug_trace&quot; #程序执行顺序日志</span><br><span class="line">xdebug.profiler_output_dir&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;php&#x2F;xdebug_profiler&quot; #程序执行性能日志</span><br><span class="line">xdebug.default_enable&#x3D;0</span><br><span class="line">xdebug.remote_enable&#x3D;1</span><br><span class="line">xdebug.remote_handler&#x3D;dbgp</span><br><span class="line">xdebug.remote_host&#x3D;192.168.5.24</span><br><span class="line">xdebug.remote_port&#x3D;9000</span><br><span class="line">xdebug.remote_connect_back&#x3D;0</span><br><span class="line">xdebug.remote_autostart&#x3D;1</span><br><span class="line">xdebug.idekey&#x3D;PHPSTORM</span><br><span class="line">xdebug.remote_log&#x3D;&#x2F;usr&#x2F;local&#x2F;php&#x2F;xdebug&#x2F;remote.log</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>zend_extension 这个值就是xdebug.so的目录，xdebug.remote_host是电脑ip，xdebug.idekey 这个值要跟phpstrom编辑器设置的一致</p>
+</blockquote>
+<p><strong>重启 php</strong> 打印 <strong>phpinfo()</strong>，如果有下图，表示成功</p>
+<p><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/yTd3hTTIV1.png!large" alt="phpstorm + xdebug 断点调试"></p>
+<p>因为我用的是docker 刚开始没有 php.ini 文件<br><code>find / -name php.ini*</code></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/RGOhxponSN.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<p>进入/usr/local/etc/php，并且根据 <strong>php.ini-development</strong> 复制一份 <strong>php.ini</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;etc&#x2F;php</span><br><span class="line">mv php.ini-development php.ini</span><br></pre></td></tr></table></figure>
+<h2 id="接下来配置phpstorm"><a href="#接下来配置phpstorm" class="headerlink" title="接下来配置phpstorm"></a>接下来配置phpstorm</h2><p><code>|file|settings</code><br>这里的 <strong>debug port</strong> 要跟上面 php.ini 里面 <strong>xdebug.remote_port</strong> 的值一致<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/unnb6VaLko.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<p>配置DBGp Proxy，这里IDE key 要跟下面浏览器debug配置的key一致<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/c02kNEe9ab.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<p>配置servers，这里的host，本地项目一般填localhost，端口要跟服务器配置的一致，我的是宿主机81端口映射到docker容器 80端口，所以填81，<strong>Debugger</strong> 这里选择 <strong>Xdebug</strong> ，下面的File/Directory配置的是宿主机php项目所在目录，而absolute path on the server配置的是Docker容器中的项目目录<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/Fncjm9wMX6.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<p>配置 <code>|Run|Debug Configurations</code><br>添加一个<code>PHP Web Page</code><br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/1WEvAQYL8y.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<h2 id="谷歌浏览器安装xdebug-helper-插件"><a href="#谷歌浏览器安装xdebug-helper-插件" class="headerlink" title="谷歌浏览器安装xdebug helper 插件"></a>谷歌浏览器安装<code>xdebug helper</code> 插件</h2><p>安装完成后，右键选择”选项”，IDE key选择”PhpStorm”，后面输入”PHPSTORM”点击save按钮即可:<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/Kxt1y59lb3.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+<p>点击右上角这个电话虫，设置断点，浏览器刷新，就可以进行断点调试<br><img src="https://cdn.learnku.com/uploads/images/202001/09/26659/vrfB90sabr.png!large" alt="phpstrom + docker + xdebug 断点调试"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://rakishly.github.io/2020/05/19/xdebug/" data-id="ckc2r6xtk0006gzbg72113w9z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xdebug/" rel="tag">xdebug</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/10/Elasticsearch/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CentOS7 下安装 Elasticsearch
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/es/">es</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/" rel="tag">es</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/" rel="tag">xdebug</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/es/" style="font-size: 10px;">es</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/28/tp-layui/">tp+layui</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/19/php/">PHP 知识</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/10/Elasticsearch/">CentOS7 下安装 Elasticsearch</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/19/xdebug/">phpstorm + xdebug 断点调试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Rakishly<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
