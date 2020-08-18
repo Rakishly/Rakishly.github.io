@@ -85,21 +85,21 @@
 
 <meta name="description" content="Logstash 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.ta">
 <meta property="og:type" content="article">
-<meta property="og:title" content="elk-install-logstash">
-<meta property="og:url" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/index.html">
+<meta property="og:title" content="CentOS7下部署ELK--Logstash篇（三）">
+<meta property="og:url" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/index.html">
 <meta property="og:site_name" content="Rakishly">
 <meta property="og:description" content="Logstash 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.ta">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/2.png">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/1.png">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/3.png">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/4.png">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/5.png">
-<meta property="article:published_time" content="2020-08-18T06:08:55.000Z">
-<meta property="article:modified_time" content="2020-08-18T06:51:46.780Z">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/2.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/1.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/3.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/4.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/5.png">
+<meta property="article:published_time" content="2020-06-11T06:08:55.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:56:50.173Z">
 <meta property="article:author" content="Rakishly">
 <meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/2.png">
+<meta name="twitter:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/2.png">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/"/>
+  <link rel="canonical" href="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/"/>
 
 
 
 
 
-  <title>elk-install-logstash | Rakishly</title>
+  <title>CentOS7下部署ELK--Logstash篇（三） | Rakishly</title>
   
 
 
@@ -254,7 +254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/06/11/elk-install-logstash/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Rakishly">
@@ -271,7 +271,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">elk-install-logstash</h1>
+          <h1 class="post-title" itemprop="name headline">CentOS7下部署ELK--Logstash篇（三）</h1>
         
 
         <div class="post-meta">
@@ -283,8 +283,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-18T14:08:55+08:00">
-                2020-08-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-11T14:08:55+08:00">
+                2020-06-11
               </time>
             
 
@@ -366,20 +366,20 @@
 <p>出现这样的提示就表示你的环境已经OK只是需要指定输入输出的规则。</p>
 <h4 id="测试标准输入输出"><a href="#测试标准输入输出" class="headerlink" title="测试标准输入输出"></a>测试标准输入输出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;logstash -e &#39;input &#123; stdin &#123;&#125; &#125; output &#123; stdout &#123; codec &#x3D;&gt; rubydebug&#125; &#125;&#39;</span><br></pre></td></tr></table></figure>
 <p>输入 hello world 显示这个表示成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;@version&quot; &#x3D;&gt; &quot;1&quot;,    #事件版本号，一个事件就是一个ruby对象</span><br><span class="line">    &quot;@timestamp&quot; &#x3D;&gt; 2020-08-18T04:30:35.106Z,    #当前事件发生的事件</span><br><span class="line">    &quot;host&quot; &#x3D;&gt; &quot;linux-elk1.exmaple.com&quot;,    #标记事件发生在哪里</span><br><span class="line">    &quot;message&quot; &#x3D;&gt; &quot;hello world&quot;    #消息的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;@version&quot; &#x3D;&gt; &quot;1&quot;,    #事件版本号，一个事件就是一个ruby对象</span><br><span class="line">    &quot;@timestamp&quot; &#x3D;&gt; 2020-06-11T04:30:35.106Z,    #当前事件发生的事件</span><br><span class="line">    &quot;host&quot; &#x3D;&gt; &quot;linux-elk1.exmaple.com&quot;,    #标记事件发生在哪里</span><br><span class="line">    &quot;message&quot; &#x3D;&gt; &quot;hello world&quot;    #消息的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="通过-logstash-收集系统-message-日志"><a href="#通过-logstash-收集系统-message-日志" class="headerlink" title="通过 logstash 收集系统 message 日志"></a>通过 logstash 收集系统 message 日志</h4><p>1、配置logstash配置文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ vim &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf</span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">    file &#123;</span><br><span class="line">        path &#x3D;&gt; &quot;&#x2F;var&#x2F;log&#x2F;messages&quot;    #日志路径</span><br><span class="line">        type &#x3D;&gt; &quot;systemlog&quot;            #类型，自定义，在进行多个日志收集存储时可以通过该项进行判断输出</span><br><span class="line">        start_position &#x3D;&gt; &quot;beginning&quot;        #logstash 从什么位置开始读取文件数据，默认是结束位置，也就是说 logstash 进程会以类似 tail -F 的形式运行。如果你是要导入原有数据，把这个设定改成 &quot;beginning&quot;，logstash 进程就从头开始读取，类似 less +F 的形式运行。</span><br><span class="line">        stat_interval &#x3D;&gt; &quot;2&quot;    #logstash 每隔多久检查一次被监听文件状态（是否有更新），默认是 1 秒</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts &#x3D;&gt; [&quot;192.168.1.31:9200&quot;]        #elasticsearch服务器地址</span><br><span class="line">        index &#x3D;&gt; &quot;logstash-%&#123;type&#125;-%&#123;+YYYY.MM.dd&#125;&quot;    #索引名称</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>重启 logstash</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;logstash&#x2F;bin&#x2F;logstash -f &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf -r    #重启</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2020/08/18/elk-install-logstash/2.png" alt></p>
+<p><img src="/2020/06/11/elk-install-logstash/2.png" alt></p>
 <p>表示成功</p>
 <p>elasticsearch-head界面查看</p>
-<p><img src="/2020/08/18/elk-install-logstash/1.png" alt></p>
+<p><img src="/2020/06/11/elk-install-logstash/1.png" alt></p>
 <p>kibana界面创建索引并查看</p>
-<p><img src="/2020/08/18/elk-install-logstash/3.png" alt></p>
-<p><img src="/2020/08/18/elk-install-logstash/4.png" alt></p>
-<p><img src="/2020/08/18/elk-install-logstash/5.png" alt></p>
+<p><img src="/2020/06/11/elk-install-logstash/3.png" alt></p>
+<p><img src="/2020/06/11/elk-install-logstash/4.png" alt></p>
+<p><img src="/2020/06/11/elk-install-logstash/5.png" alt></p>
 
       
     </div>
@@ -410,8 +410,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/18/elk-install-kibana/" rel="next" title="elk-install-kibana">
-                <i class="fa fa-chevron-left"></i> elk-install-kibana
+              <a href="/2020/06/11/elk-install-kibana/" rel="next" title="CentOS7下部署ELK--kibana篇（二）">
+                <i class="fa fa-chevron-left"></i> CentOS7下部署ELK--kibana篇（二）
               </a>
             
           </div>
@@ -419,6 +419,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/19/php/" rel="prev" title="PHP 知识">
+                PHP 知识 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
