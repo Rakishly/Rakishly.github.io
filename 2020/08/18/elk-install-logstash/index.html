@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Elasticsearch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Logstash 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.ta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk-install-logstash">
+<meta property="og:url" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/index.html">
+<meta property="og:site_name" content="Rakishly">
+<meta property="og:description" content="Logstash 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.ta">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/2.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/1.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/3.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/4.png">
+<meta property="og:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/5.png">
+<meta property="article:published_time" content="2020-08-18T06:08:55.000Z">
+<meta property="article:modified_time" content="2020-08-18T06:51:46.780Z">
+<meta property="article:author" content="Rakishly">
+<meta property="article:tag" content="Elasticsearch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/2.png">
+
+
+
+<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/"/>
+
+
+
+
+
+  <title>elk-install-logstash | Rakishly</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rakishly</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elk-install-logstash</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-18T14:08:55+08:00">
+                2020-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><code>Logstash</code> 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。</p>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.tar.gz</span><br><span class="line">$ tar -zxvf logstash-6.3.0.tar.gz</span><br><span class="line">$ cd logstash-6.3.0</span><br><span class="line">$ bin&#x2F;logstash  #启动</span><br></pre></td></tr></table></figure>
+<h4 id="可能出现的问题："><a href="#可能出现的问题：" class="headerlink" title="可能出现的问题："></a>可能出现的问题：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OpenJDK 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000083e80000, 3221225472， 0) failed; error&#x3D;&#39;Cannot allocate memory&#39; (errno&#x3D;12)</span><br></pre></td></tr></table></figure>
+<p>原因就是内存无法分配的问题<br>修改 <code>config/jvm.options</code>中的参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## JVM configuration</span><br><span class="line"></span><br><span class="line"># Xms represents the initial size of total heap space</span><br><span class="line"># Xmx represents the maximum size of total heap space</span><br><span class="line"></span><br><span class="line">-Xms128m</span><br><span class="line">-Xmx128m</span><br></pre></td></tr></table></figure>
+<p>如果还是无法启动</p>
+<p>执行命令 <code>free -h</code> 查看内存是不是还有,最主要的是 看有没有交换空间 swap （这很重要）果没有交换空间 或者交换空间比较小 ,要先安装交换空间 或者增大空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              total        used        free      shared  buff&#x2F;cache   available</span><br><span class="line">Mem:           990M        495M        202M        2.0M        292M        347M</span><br><span class="line">Swap:          5.8G        1.5G        4.2G</span><br></pre></td></tr></table></figure>
+<p>这是我增大过的空间，自己另行修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 可根据实际需要更改count值的大小，这里设置5000000，大概就是4G多</span><br><span class="line">$ dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;swapfile bs&#x3D;1024 count&#x3D;5000000</span><br></pre></td></tr></table></figure>
+<p>将swapfile设置为swap空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkswap swapfile</span><br></pre></td></tr></table></figure>
+<p>启用交换空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ swapon swapfile</span><br></pre></td></tr></table></figure>
+<p>查看是否增加swap分区或者扩大空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br></pre></td></tr></table></figure>
+<p>再次启动，出现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Pipelines YAML file is empty. Location: &#x2F;usr&#x2F;local&#x2F;logstash-6.5.3&#x2F;config&#x2F;pipelines.yml</span><br><span class="line">usage:</span><br><span class="line">  bin&#x2F;logstash -f CONFIG_PATH [-t] [-r] [] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash --modules MODULE_NAME [-M &quot;MODULE_NAME.var.PLUGIN_TYPE.PLUGIN_NAME.VARIABLE_NAME&#x3D;VALUE&quot;] [-t] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash -e CONFIG_STR [-t] [--log.level fatal|error|warn|info|debug|trace] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash -i SHELL [--log.level fatal|error|warn|info|debug|trace]</span><br><span class="line">  bin&#x2F;logstash -V [--log.level fatal|error|warn|info|debug|trace]</span><br><span class="line">  bin&#x2F;logstash --help</span><br></pre></td></tr></table></figure>
+<p>出现这样的提示就表示你的环境已经OK只是需要指定输入输出的规则。</p>
+<h4 id="测试标准输入输出"><a href="#测试标准输入输出" class="headerlink" title="测试标准输入输出"></a>测试标准输入输出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;logstash -e &#39;input &#123; stdin &#123;&#125; &#125; output &#123; stdout &#123; codec &#x3D;&gt; rubydebug&#125; &#125;&#39;</span><br></pre></td></tr></table></figure>
+<p>输入 hello world 显示这个表示成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;@version&quot; &#x3D;&gt; &quot;1&quot;,    #事件版本号，一个事件就是一个ruby对象</span><br><span class="line">    &quot;@timestamp&quot; &#x3D;&gt; 2020-08-18T04:30:35.106Z,    #当前事件发生的事件</span><br><span class="line">    &quot;host&quot; &#x3D;&gt; &quot;linux-elk1.exmaple.com&quot;,    #标记事件发生在哪里</span><br><span class="line">    &quot;message&quot; &#x3D;&gt; &quot;hello world&quot;    #消息的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="通过-logstash-收集系统-message-日志"><a href="#通过-logstash-收集系统-message-日志" class="headerlink" title="通过 logstash 收集系统 message 日志"></a>通过 logstash 收集系统 message 日志</h4><p>1、配置logstash配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ vim &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf</span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">    file &#123;</span><br><span class="line">        path &#x3D;&gt; &quot;&#x2F;var&#x2F;log&#x2F;messages&quot;    #日志路径</span><br><span class="line">        type &#x3D;&gt; &quot;systemlog&quot;            #类型，自定义，在进行多个日志收集存储时可以通过该项进行判断输出</span><br><span class="line">        start_position &#x3D;&gt; &quot;beginning&quot;        #logstash 从什么位置开始读取文件数据，默认是结束位置，也就是说 logstash 进程会以类似 tail -F 的形式运行。如果你是要导入原有数据，把这个设定改成 &quot;beginning&quot;，logstash 进程就从头开始读取，类似 less +F 的形式运行。</span><br><span class="line">        stat_interval &#x3D;&gt; &quot;2&quot;    #logstash 每隔多久检查一次被监听文件状态（是否有更新），默认是 1 秒</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts &#x3D;&gt; [&quot;192.168.1.31:9200&quot;]        #elasticsearch服务器地址</span><br><span class="line">        index &#x3D;&gt; &quot;logstash-%&#123;type&#125;-%&#123;+YYYY.MM.dd&#125;&quot;    #索引名称</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启 logstash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;logstash&#x2F;bin&#x2F;logstash -f &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf -r    #重启</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/08/18/elk-install-logstash/2.png" alt></p>
+<p>表示成功</p>
+<p>elasticsearch-head界面查看</p>
+<p><img src="/2020/08/18/elk-install-logstash/1.png" alt></p>
+<p>kibana界面创建索引并查看</p>
+<p><img src="/2020/08/18/elk-install-logstash/3.png" alt></p>
+<p><img src="/2020/08/18/elk-install-logstash/4.png" alt></p>
+<p><img src="/2020/08/18/elk-install-logstash/5.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/18/elk-install-kibana/" rel="next" title="elk-install-kibana">
+                <i class="fa fa-chevron-left"></i> elk-install-kibana
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rakishly</p>
+              <p class="site-description motion-element" itemprop="description">不求风骚惊天下，但求猥琐动世人</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Rakishly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可能出现的问题："><span class="nav-number">1.1.</span> <span class="nav-text">可能出现的问题：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试标准输入输出"><span class="nav-number">1.2.</span> <span class="nav-text">测试标准输入输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过-logstash-收集系统-message-日志"><span class="nav-number">1.3.</span> <span class="nav-text">通过 logstash 收集系统 message 日志</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rakishly</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -246,7 +246,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/13/es1/">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/18/elk-install-logstash/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Rakishly">
@@ -265,7 +265,614 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/08/13/es1/" itemprop="url">Elasticsearch 入门一</a></h1>
+                <a class="post-title-link" href="/2020/08/18/elk-install-logstash/" itemprop="url">elk-install-logstash</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-18T14:08:55+08:00">
+                2020-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p><code>Logstash</code> 是一个开源的数据收集引擎，可以水平伸缩，而且logstash是整个ELK当中拥有最多插件的一个组件，其可以接收来自不同来源的数据并同意输出到指定的且可以是多个不同目的地。</p>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstash&#x2F;logstash-6.3.0.tar.gz</span><br><span class="line">$ tar -zxvf logstash-6.3.0.tar.gz</span><br><span class="line">$ cd logstash-6.3.0</span><br><span class="line">$ bin&#x2F;logstash  #启动</span><br></pre></td></tr></table></figure>
+<h4 id="可能出现的问题："><a href="#可能出现的问题：" class="headerlink" title="可能出现的问题："></a>可能出现的问题：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OpenJDK 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000083e80000, 3221225472， 0) failed; error&#x3D;&#39;Cannot allocate memory&#39; (errno&#x3D;12)</span><br></pre></td></tr></table></figure>
+<p>原因就是内存无法分配的问题<br>修改 <code>config/jvm.options</code>中的参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## JVM configuration</span><br><span class="line"></span><br><span class="line"># Xms represents the initial size of total heap space</span><br><span class="line"># Xmx represents the maximum size of total heap space</span><br><span class="line"></span><br><span class="line">-Xms128m</span><br><span class="line">-Xmx128m</span><br></pre></td></tr></table></figure>
+<p>如果还是无法启动</p>
+<p>执行命令 <code>free -h</code> 查看内存是不是还有,最主要的是 看有没有交换空间 swap （这很重要）果没有交换空间 或者交换空间比较小 ,要先安装交换空间 或者增大空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              total        used        free      shared  buff&#x2F;cache   available</span><br><span class="line">Mem:           990M        495M        202M        2.0M        292M        347M</span><br><span class="line">Swap:          5.8G        1.5G        4.2G</span><br></pre></td></tr></table></figure>
+<p>这是我增大过的空间，自己另行修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 可根据实际需要更改count值的大小，这里设置5000000，大概就是4G多</span><br><span class="line">$ dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;swapfile bs&#x3D;1024 count&#x3D;5000000</span><br></pre></td></tr></table></figure>
+<p>将swapfile设置为swap空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkswap swapfile</span><br></pre></td></tr></table></figure>
+<p>启用交换空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ swapon swapfile</span><br></pre></td></tr></table></figure>
+<p>查看是否增加swap分区或者扩大空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br></pre></td></tr></table></figure>
+<p>再次启动，出现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Pipelines YAML file is empty. Location: &#x2F;usr&#x2F;local&#x2F;logstash-6.5.3&#x2F;config&#x2F;pipelines.yml</span><br><span class="line">usage:</span><br><span class="line">  bin&#x2F;logstash -f CONFIG_PATH [-t] [-r] [] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash --modules MODULE_NAME [-M &quot;MODULE_NAME.var.PLUGIN_TYPE.PLUGIN_NAME.VARIABLE_NAME&#x3D;VALUE&quot;] [-t] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash -e CONFIG_STR [-t] [--log.level fatal|error|warn|info|debug|trace] [-w COUNT] [-l LOG]</span><br><span class="line">  bin&#x2F;logstash -i SHELL [--log.level fatal|error|warn|info|debug|trace]</span><br><span class="line">  bin&#x2F;logstash -V [--log.level fatal|error|warn|info|debug|trace]</span><br><span class="line">  bin&#x2F;logstash --help</span><br></pre></td></tr></table></figure>
+<p>出现这样的提示就表示你的环境已经OK只是需要指定输入输出的规则。</p>
+<h4 id="测试标准输入输出"><a href="#测试标准输入输出" class="headerlink" title="测试标准输入输出"></a>测试标准输入输出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;logstash -e &#39;input &#123; stdin &#123;&#125; &#125; output &#123; stdout &#123; codec &#x3D;&gt; rubydebug&#125; &#125;&#39;</span><br></pre></td></tr></table></figure>
+<p>输入 hello world 显示这个表示成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;@version&quot; &#x3D;&gt; &quot;1&quot;,    #事件版本号，一个事件就是一个ruby对象</span><br><span class="line">    &quot;@timestamp&quot; &#x3D;&gt; 2020-08-18T04:30:35.106Z,    #当前事件发生的事件</span><br><span class="line">    &quot;host&quot; &#x3D;&gt; &quot;linux-elk1.exmaple.com&quot;,    #标记事件发生在哪里</span><br><span class="line">    &quot;message&quot; &#x3D;&gt; &quot;hello world&quot;    #消息的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="通过-logstash-收集系统-message-日志"><a href="#通过-logstash-收集系统-message-日志" class="headerlink" title="通过 logstash 收集系统 message 日志"></a>通过 logstash 收集系统 message 日志</h4><p>1、配置logstash配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ vim &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf</span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">    file &#123;</span><br><span class="line">        path &#x3D;&gt; &quot;&#x2F;var&#x2F;log&#x2F;messages&quot;    #日志路径</span><br><span class="line">        type &#x3D;&gt; &quot;systemlog&quot;            #类型，自定义，在进行多个日志收集存储时可以通过该项进行判断输出</span><br><span class="line">        start_position &#x3D;&gt; &quot;beginning&quot;        #logstash 从什么位置开始读取文件数据，默认是结束位置，也就是说 logstash 进程会以类似 tail -F 的形式运行。如果你是要导入原有数据，把这个设定改成 &quot;beginning&quot;，logstash 进程就从头开始读取，类似 less +F 的形式运行。</span><br><span class="line">        stat_interval &#x3D;&gt; &quot;2&quot;    #logstash 每隔多久检查一次被监听文件状态（是否有更新），默认是 1 秒</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts &#x3D;&gt; [&quot;192.168.1.31:9200&quot;]        #elasticsearch服务器地址</span><br><span class="line">        index &#x3D;&gt; &quot;logstash-%&#123;type&#125;-%&#123;+YYYY.MM.dd&#125;&quot;    #索引名称</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启 logstash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;logstash&#x2F;bin&#x2F;logstash -f &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf -r    #重启</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/08/18/elk-install-logstash/2.png" alt></p>
+<p>表示成功</p>
+<p>elasticsearch-head界面查看</p>
+<p><img src="/2020/08/18/elk-install-logstash/1.png" alt></p>
+<p>kibana界面创建索引并查看</p>
+<p><img src="/2020/08/18/elk-install-logstash/3.png" alt></p>
+<p><img src="/2020/08/18/elk-install-logstash/4.png" alt></p>
+<p><img src="/2020/08/18/elk-install-logstash/5.png" alt></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/18/elk-install-kibana/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/18/elk-install-kibana/" itemprop="url">elk-install-kibana</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-18T13:47:18+08:00">
+                2020-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p><code>Kibana</code>是一个通过调用<code>elasticsearch</code>服务器进行图形化展示搜索结果的开源项目。下载地址：<a href="https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-linux-x86_64.tar.gz" target="_blank" rel="noopener">https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-linux-x86_64.tar.gz</a></p>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.3.0-linux-x86_64.tar.gz</span><br><span class="line">$ tar -zxvf kibana-6.3.0-linux-x86_64.tar.gz</span><br><span class="line">$ cd kibana-6.3.0-linux-x86_64</span><br><span class="line">$ vim config&#x2F;kibana.yml</span><br></pre></td></tr></table></figure>
+<p>主要修改这几个参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.port: 5601    #监听端口</span><br><span class="line">server.host: &quot;192.168.1.31&quot;    #监听地址</span><br><span class="line">elasticsearch.hosts: [&quot;http:&#x2F;&#x2F;192.168.1.31:9200&quot;]    #elasticsearch服务器地址</span><br><span class="line">i18n.locale: &quot;zh-CN&quot;    #修改为中文</span><br></pre></td></tr></table></figure>
+<p>然后启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;kibana &amp;</span><br></pre></td></tr></table></figure>
+<p>出现这个证明启动成功</p>
+<p><img src="/2020/08/18/elk-install-kibana/4.png" alt></p>
+<p>访问 <code>http://localhost:5601</code></p>
+<p><img src="/2020/08/18/elk-install-kibana/5.png" alt></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/17/3es-curd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/17/3es-curd/" itemprop="url">Elasticsearch 基本操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-17T10:52:04+08:00">
+                2020-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ik分词器安装声明：安装完成后需要重新启动elasticsearch，elasticsearch-head，kibana</span><br><span class="line"></span><br><span class="line">在elasticsearch目录的plugins解压elasticsearch-analysis-ik-7.6.1.zip</span><br><span class="line">unzip elasticsearch-analysis-ik-7.6.1.zip</span><br></pre></td></tr></table></figure>
+
+<h4 id="ik分词器介绍"><a href="#ik分词器介绍" class="headerlink" title="ik分词器介绍"></a>ik分词器介绍</h4><p>分词:即把一段中文或者别的划分成一个个的关键字,我们在搜索时候会把自己的信息进行分词,会把数据库中或者索引库中的数据进行分词,然后进行一个匹配操作,默认的中文分词是将每个字看成一个词，比如：</p>
+<p>“中国的花”会被分为”中”,”国”,”的”,”花”,这显然是不符合要求的，所以我们需要安装中文分词器ik来解决这个问题</p>
+<p>如果要使用中文，建议使用ik分词器！</p>
+<p>IK提供了两个分词算法：ik_smart 和 ik_max_word，其中 ik_smart 为最少切分，ik_max_word为最细 粒度划分！一会我们测试！</p>
+<p><code>elasticsearch-plugin</code> 可以通过这个命令来查看加载进来的插件</p>
+<blockquote>
+<p>ik_smart为最少切分</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;:&quot;ik_smart&quot;,</span><br><span class="line">  &quot;text&quot;:&quot;假野猪天下第一&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokens&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;假&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 1,</span><br><span class="line">      &quot;type&quot;: &quot;CN_CHAR&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;野猪&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 1,</span><br><span class="line">      &quot;end_offset&quot;: 3,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;天下第一&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 3,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 2</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>ik_max_word为最细粒度划分！穷尽词库的可能！字典！</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;:&quot;ik_max_word&quot;,</span><br><span class="line">  &quot;text&quot;:&quot;假野猪天下第一&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokens&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;假&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 1,</span><br><span class="line">      &quot;type&quot;: &quot;CN_CHAR&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;野猪&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 1,</span><br><span class="line">      &quot;end_offset&quot;: 3,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;天下第一&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 3,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 2</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;天下&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 3,</span><br><span class="line">      &quot;end_offset&quot;: 5,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 3</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;下第&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 4,</span><br><span class="line">      &quot;end_offset&quot;: 6,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 4</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;第一&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 5,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot;: 5</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;一&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 6,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;TYPE_CNUM&quot;,</span><br><span class="line">      &quot;position&quot;: 6</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到没，被拆成七个词！！</p>
+<h3 id="Elasticsearch-基本操作"><a href="#Elasticsearch-基本操作" class="headerlink" title="Elasticsearch 基本操作"></a>Elasticsearch 基本操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Elasticsearch 把操作都封装成了 HTTP 的 API，我们只要给 Elasticsearch 发送 HTTP 请求就行。</span><br><span class="line">比如使用 curl -XPUT &#39;http:&#x2F;&#x2F;ip:port&#x2F;customer&#39;，就能建立一个名为 customer 的索引，其他操作也是类似的。</span><br></pre></td></tr></table></figure>
+<p>基本Rest命令说明：</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th>url地址</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PUT</td>
+<td>localhost:9200/索引名称/类型名称/文档id</td>
+<td>创建文档（指定文档id）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200/索引名称/类型名称</td>
+<td>创建文档（随机文档id）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200/索引名称/类型名称/文档id/_update</td>
+<td>修改文档</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>localhost:9200/索引名称/类型名称/文档id</td>
+<td>删除文档</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>localhost:9200/索引名称/类型名称/文档id</td>
+<td>查询文档通过文档id</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200/索引名称/类型名称/_search</td>
+<td>查询所有数据</td>
+</tr>
+</tbody></table>
+<h4 id="1、创建一个索引"><a href="#1、创建一个索引" class="headerlink" title="1、创建一个索引"></a>1、创建一个索引</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;索引名&#x2F;~类型名~&#x2F;文档id</span><br><span class="line">&#123;请求体&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;John Doe&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果报 <code>index_not_found_exception</code> 错误，打开 <code>elasticsearch.yml</code> 配置文件，将 <code>auto_create_index</code> 设置成 <code>true</code></p>
+<p><img src="/2020/08/17/3es-curd/1.png" alt></p>
+<p>创建成功，返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 1,</span><br><span class="line">    &quot;result&quot;: &quot;created&quot;,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;successful&quot;: 1,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;created&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>_version</code> 版本号,如果修改了这个索引，值会增加</p>
+<p><code>result</code> 如果是修改的话，值是 updated</p>
+</blockquote>
+<p>打开 <code>elasticsearch-head</code> 查看（如果没有安装的话，自行百度安装）</p>
+<p><img src="/2020/08/17/3es-curd/2.png" alt></p>
+<p>这就是我们可以把它当成数据库学习的原因！是不是贼像！</p>
+<p>那么问题来了，用不用指定数据类型，毕竟我们的数据库是有数据类型的啊</p>
+<ul>
+<li>字符串类型 <code>text, keyword</code></li>
+<li>数值类型 <code>long, integer, short, byte, double, float, half_float, scaled_float</code></li>
+<li>日期类型 <code>date</code></li>
+<li>布尔值类型 <code>boolean</code></li>
+<li>二进制类型 <code>binary</code></li>
+<li>等等</li>
+</ul>
+<h4 id="2、指定字段类型"><a href="#2、指定字段类型" class="headerlink" title="2、指定字段类型"></a>2、指定字段类型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;user</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;doc&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;age&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;birthday&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;date&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>成功返回:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;acknowledged&quot;: true,</span><br><span class="line">    &quot;shards_acknowledged&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 GET 请求获取具体的信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;user</span><br></pre></td></tr></table></figure>
+<p>返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;user&quot;: &#123;</span><br><span class="line">        &quot;aliases&quot;: &#123;&#125;,</span><br><span class="line">        &quot;mappings&quot;: &#123;</span><br><span class="line">            &quot;doc&quot;: &#123;</span><br><span class="line">                &quot;properties&quot;: &#123;</span><br><span class="line">                    &quot;age&quot;: &#123;</span><br><span class="line">                        &quot;type&quot;: &quot;long&quot;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &quot;birthday&quot;: &#123;</span><br><span class="line">                        &quot;type&quot;: &quot;date&quot;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &quot;name&quot;: &#123;</span><br><span class="line">                        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;settings&quot;: &#123;</span><br><span class="line">            &quot;index&quot;: &#123;</span><br><span class="line">                &quot;creation_date&quot;: &quot;1597644644714&quot;,</span><br><span class="line">                &quot;number_of_shards&quot;: &quot;5&quot;,</span><br><span class="line">                &quot;number_of_replicas&quot;: &quot;1&quot;,</span><br><span class="line">                &quot;uuid&quot;: &quot;dQgYAqiYTAS5pGPLDRK-mg&quot;,</span><br><span class="line">                &quot;version&quot;: &#123;</span><br><span class="line">                    &quot;created&quot;: &quot;5050199&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;provided_name&quot;: &quot;user&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>扩展： 通过命令 elasticsearch 索引情况！ 通过 <code>get _cat/indices?v</code> 可以获得es的当前的很多信息！</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;_cat&#x2F;indices?v</span><br></pre></td></tr></table></figure>
+<h4 id="3、修改索引-还是用-PUT方法覆盖原来的值"><a href="#3、修改索引-还是用-PUT方法覆盖原来的值" class="headerlink" title="3、修改索引,还是用 PUT方法覆盖原来的值"></a>3、修改索引,还是用 PUT方法覆盖原来的值</h4><h4 id="4、查询索引"><a href="#4、查询索引" class="headerlink" title="4、查询索引"></a>4、查询索引</h4><p>1、查询索引所有数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;customer&#x2F;doc&#x2F;_search</span><br></pre></td></tr></table></figure>
+<p>返回:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;took&quot;: 10,</span><br><span class="line">    &quot;timed_out&quot;: false,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 5,</span><br><span class="line">        &quot;successful&quot;: 5,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;hits&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;max_score&quot;: 1.0,</span><br><span class="line">        &quot;hits&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;2&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;rassss&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回的参数说明：</p>
+<ul>
+<li><code>took</code>  单位为 ms，Elasticsearch 处理这个请求用了多久</li>
+<li><code>timed_out</code> 搜索请求是否超时</li>
+<li><code>_shards</code> 搜索了多少个分片，以及成功、失败或跳过了多少个分片</li>
+<li><code>max_score</code> 找到的最相关文件的分数</li>
+<li><code>hits.total</code> 找到了多少个匹配的文档</li>
+<li><code>hits.sort</code> 文档的排序（不按相关性得分排序时）</li>
+<li><code>hits._score</code> 文档的相关性得分（使用时不适用 match_all）</li>
+</ul>
+<p>2、通过文档id查询数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 2,</span><br><span class="line">    &quot;found&quot;: true,</span><br><span class="line">    &quot;_source&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><p>通过DELETE 命令实现删除、 根据你的请求来判断是删除索引还是删除文档记录！</p>
+<p>1、指定文档id删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">DELETE &#x2F;customer&#x2F;doc&#x2F;1 </span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;found&quot;: true,</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 3,</span><br><span class="line">    &quot;result&quot;: &quot;deleted&quot;,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;successful&quot;: 1,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、删除索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELETE &#x2F;customer</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;acknowledged&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/13/2es-gainian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/13/2es-gainian/" itemprop="url">Elasticsearch 概念</a></h1>
         
 
         <div class="post-meta">
@@ -381,6 +988,9 @@
 <blockquote>
 <p>Shard有两种类型：primary和replica，即主shard及副本shard。Primary shard用于文档存储，每个新的索引会自动创建5个Primary shard，当然此数量可在索引创建之前通过配置自行定义，不过，一旦创建完成，其Primary shard的数量将不可更改。Replica shard是Primary Shard的副本，用于冗余数据及提高搜索性能。每个Primary shard默认配置了一个Replica shard，但也可以配置多个，且其数量可动态更改。ES会根据需要自动增加或减少这些Replica shard的数量。</p>
 </blockquote>
+<blockquote>
+<p>简单点就是：当有大量的文档时，由于内存的限制、磁盘处理能力不足、无法足够快的响应客户端的请求等，一个节点可能不够。这种情况下，数据可以分为较小的分片。每个分片放到不同的服务器上。<br> 当你查询的索引分布在多个分片上时，ES会把查询发送给每个相关的分片，并将结果组合在一起，而应用程序并不知道分片的存在。即：这个过程对用户来说是透明的。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -408,7 +1018,7 @@
 <blockquote>
 <p>一个集群至少有一个节点，而一个节点就是一个elasricsearch进程，节点可以有多个索引默认的，如果 你创建索引，那么索引将会有个5个分片 ( primary shard ,又称主分片 ) 构成的，每一个主分片会有一个 副本 ( replica shard ,又称复制分片 )</p>
 </blockquote>
-<p><img src="/2020/08/13/es1/markdown-img-paste-20200807195126812.png" alt></p>
+<p><img src="/2020/08/13/2es-gainian/markdown-img-paste-20200807195126812.png" alt></p>
 <p>上图是一个有3个节点的集群，可以看到主分片和对应的复制分片都不会在同一个节点内，这样有利于某 个节点挂掉 了，数据也不至于丢失。 实际上，一个分片是一个Lucene索引，一个包含倒排索引的文件 目录，倒排索引的结构使 得elasticsearch在不扫描全部文档的情况下，就能告诉你哪些文档包含特定的 关键字。 不过，等等，倒排索引是什 么鬼?</p>
 <h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><blockquote>
 <p>elasticsearch使用的是一种称为倒排索引的结构，采用Lucene倒排索作为底层。这种结构适用于快速的 全文搜索， 一个索引由文档中所有不重复的列表构成，对于每一个词，都有一个包含它的文档列表。 例 如，现在有两个文档， 每个文档包含如下内容：</p>
@@ -418,7 +1028,7 @@
 <p>现在，我们试图搜索 to forever，只需要查看包含每个词条的文档 | term | doc_1 | doc_2 | | ——- | —– | —– | | to | √ | × | | forever | √ | √ | | total | 2 | 1 |</p>
 <p>两个文档都匹配，但是第一个文档比第二个匹配程度更高。如果没有别的条件，现在，这两个包含关键 字的文档都将返回。</p>
 <p>再来看一个示例，比如我们通过博客标签来搜索博客文章。那么倒排索引列表就是这样的一个结构 :</p>
-<p><img src="/2020/08/13/es1/1.png" alt></p>
+<p><img src="/2020/08/13/2es-gainian/1.png" alt></p>
 <p>如果要搜索含有 python 标签的文章，那相对于查找所有原始数据而言，查找倒排索引后的数据将会快 的多。只需要 查看标签这一栏，然后获取相关的文章ID即可。完全过滤掉无关的所有数据，提高效率！</p>
 <p>elasticsearch的索引和Lucene的索引对比</p>
 <p>在elasticsearch中， 索引 （库）这个词被频繁使用，这就是术语的使用。 在elasticsearch中，索引被 分为多个分片，每份 分片是一个Lucene的索引。所以一个elasticsearch索引是由多个Lucene索引组成 的。别问为什么，谁让elasticsearch使用Lucene作为底层呢! 如无特指，说起索引都是指elasticsearch 的索引。</p>
@@ -811,7 +1421,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/06/10/Elasticsearch/">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/06/10/elk-install-es/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Rakishly">
@@ -830,7 +1440,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/06/10/Elasticsearch/" itemprop="url">CentOS7 下安装 Elasticsearch</a></h1>
+                <a class="post-title-link" href="/2020/06/10/elk-install-es/" itemprop="url">CentOS7下部署ELK--Elasticsearch篇（一）</a></h1>
         
 
         <div class="post-meta">
@@ -865,8 +1475,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/es/" itemprop="url" rel="index">
-                    <span itemprop="name">es</span>
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
                   </a>
                 </span>
 
@@ -927,12 +1537,13 @@
 <p>最后</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
 <p>至此设置完成。</p>
-<h3 id="2、下载es"><a href="#2、下载es" class="headerlink" title="2、下载es"></a>2、下载es</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-5.5.1.zip</span><br><span class="line">$ unzip elasticsearch-5.5.1.zip</span><br><span class="line">$ cd elasticsearch-5.5.1&#x2F; </span><br><span class="line">$ .&#x2F;bin&#x2F;elasticsearch</span><br></pre></td></tr></table></figure>
+<h3 id="2、下载es"><a href="#2、下载es" class="headerlink" title="2、下载es"></a>2、下载es</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-6.3.0.tar.gz</span><br><span class="line">$ tar -zxvf elasticsearch-6.3.0.zip</span><br><span class="line">$ cd elasticsearch-6.3.0&#x2F; </span><br><span class="line">$ .&#x2F;bin&#x2F;elasticsearch</span><br></pre></td></tr></table></figure>
 <p><strong>有可能出现的错误：</strong><br>1、</p>
 <blockquote>
 <p>OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriat<br>OpenJDK 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000085330000, 2060255232, 0) failed; error=’Cannot allocate memory’ (errno=12)</p>
 </blockquote>
-<p><img src="https://cdn.learnku.com/uploads/images/202003/20/26659/ulZenMp935.png!large" alt="centos7下安装Elasticsearch "><br>修改jvm</p>
+<p><img src="https://cdn.learnku.com/uploads/images/202003/20/26659/ulZenMp935.png!large" alt="centos7下安装Elasticsearch "></p>
+<p>修改jvm</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ vim config&#x2F;jvm.options</span><br><span class="line">-Xms4g</span><br><span class="line">-Xmx4g</span><br></pre></td></tr></table></figure>
 <p>修改为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-Xms512m</span><br><span class="line">-Xmx512m</span><br></pre></td></tr></table></figure>
@@ -1186,7 +1797,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1197,7 +1808,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1208,7 +1819,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
