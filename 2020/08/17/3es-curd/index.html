@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://blog.rakishly.xyz/2020/08/17/3es-curd/1.png">
 <meta property="og:image" content="http://blog.rakishly.xyz/2020/08/17/3es-curd/2.png">
 <meta property="article:published_time" content="2020-08-17T02:52:04.000Z">
-<meta property="article:modified_time" content="2020-08-18T07:05:34.127Z">
+<meta property="article:modified_time" content="2020-08-20T08:40:45.076Z">
 <meta property="article:author" content="Rakishly">
 <meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
@@ -418,7 +418,13 @@
 <p>扩展： 通过命令 elasticsearch 索引情况！ 通过 <code>get _cat/indices?v</code> 可以获得es的当前的很多信息！</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;_cat&#x2F;indices?v</span><br></pre></td></tr></table></figure>
-<h4 id="3、修改索引-还是用-PUT方法覆盖原来的值"><a href="#3、修改索引-还是用-PUT方法覆盖原来的值" class="headerlink" title="3、修改索引,还是用 PUT方法覆盖原来的值"></a>3、修改索引,还是用 PUT方法覆盖原来的值</h4><h4 id="4、查询索引"><a href="#4、查询索引" class="headerlink" title="4、查询索引"></a>4、查询索引</h4><p>1、查询索引所有数据</p>
+<h4 id="3、修改索引"><a href="#3、修改索引" class="headerlink" title="3、修改索引"></a>3、修改索引</h4><p>1、还是用 PUT 方式覆盖原来的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">put &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;:&quot;end&quot;,</span><br><span class="line">  &quot;age&quot; : 18</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、使用 post 方式，灵活性较好，推荐使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;1&#x2F;_update</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot; : &#123;</span><br><span class="line">    &quot;name&quot;:&quot;end1111&quot;,</span><br><span class="line">    &quot;age&quot; : 20</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="4、查询索引"><a href="#4、查询索引" class="headerlink" title="4、查询索引"></a>4、查询索引</h4><p>1、查询索引所有数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;customer&#x2F;doc&#x2F;_search</span><br></pre></td></tr></table></figure>
 <p>返回:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;took&quot;: 10,</span><br><span class="line">    &quot;timed_out&quot;: false,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 5,</span><br><span class="line">        &quot;successful&quot;: 5,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;hits&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;max_score&quot;: 1.0,</span><br><span class="line">        &quot;hits&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;2&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;rassss&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -430,7 +436,7 @@
 <li><code>max_score</code> 找到的最相关文件的分数</li>
 <li><code>hits.total</code> 找到了多少个匹配的文档</li>
 <li><code>hits.sort</code> 文档的排序（不按相关性得分排序时）</li>
-<li><code>hits._score</code> 文档的相关性得分（使用时不适用 match_all）</li>
+<li><code>hits._score</code> 文档的相关性得分，匹配度越高分值越高（使用时不适用 match_all）</li>
 </ul>
 <p>2、通过文档id查询数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 2,</span><br><span class="line">    &quot;found&quot;: true,</span><br><span class="line">    &quot;_source&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -500,6 +506,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/20/elasticsearch/4es-query/" rel="prev" title="Elasticsearch 花式查询">
+                Elasticsearch 花式查询 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -576,7 +586,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -641,7 +651,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-基本操作"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、创建一个索引"><span class="nav-number">1.1.</span> <span class="nav-text">1、创建一个索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、指定字段类型"><span class="nav-number">1.2.</span> <span class="nav-text">2、指定字段类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、修改索引-还是用-PUT方法覆盖原来的值"><span class="nav-number">1.3.</span> <span class="nav-text">3、修改索引,还是用 PUT方法覆盖原来的值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、查询索引"><span class="nav-number">1.4.</span> <span class="nav-text">4、查询索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除索引"><span class="nav-number">1.5.</span> <span class="nav-text">删除索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ik分词器"><span class="nav-number">2.</span> <span class="nav-text">ik分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ik分词器介绍"><span class="nav-number">2.1.</span> <span class="nav-text">ik分词器介绍</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-基本操作"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、创建一个索引"><span class="nav-number">1.1.</span> <span class="nav-text">1、创建一个索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、指定字段类型"><span class="nav-number">1.2.</span> <span class="nav-text">2、指定字段类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、修改索引"><span class="nav-number">1.3.</span> <span class="nav-text">3、修改索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、查询索引"><span class="nav-number">1.4.</span> <span class="nav-text">4、查询索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除索引"><span class="nav-number">1.5.</span> <span class="nav-text">删除索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ik分词器"><span class="nav-number">2.</span> <span class="nav-text">ik分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ik分词器介绍"><span class="nav-number">2.1.</span> <span class="nav-text">ik分词器介绍</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -246,6 +246,210 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/20/elasticsearch/4es-query/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/20/elasticsearch/4es-query/" itemprop="url">Elasticsearch 花式查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-20T16:42:15+08:00">
+                2020-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Elasticsearch-花式查询"><a href="#Elasticsearch-花式查询" class="headerlink" title="Elasticsearch 花式查询"></a>Elasticsearch 花式查询</h3><h4 id="简单条件查询"><a href="#简单条件查询" class="headerlink" title="简单条件查询"></a>简单条件查询</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get customer&#x2F;doc&#x2F;_search?q&#x3D;name:end</span><br></pre></td></tr></table></figure>
+
+<p>成功返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 25,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 1,</span><br><span class="line">    &quot;max_score&quot;: 0.2876821,</span><br><span class="line">    &quot;hits&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">        &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">        &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">        &quot;_score&quot;: 0.2876821,</span><br><span class="line">        &quot;_source&quot;: &#123;</span><br><span class="line">          &quot;name&quot;: &quot;end&quot;,</span><br><span class="line">          &quot;age&quot;: 18</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回参数说明可以看基本操作那一节： <a href="https://blog.rakishly.xyz/2020/08/17/3es-curd/">https://blog.rakishly.xyz/2020/08/17/3es-curd/</a></p>
+<h4 id="复杂操作查询（排序，分页，高亮，模糊查询，精准查询）"><a href="#复杂操作查询（排序，分页，高亮，模糊查询，精准查询）" class="headerlink" title="复杂操作查询（排序，分页，高亮，模糊查询，精准查询）"></a>复杂操作查询（排序，分页，高亮，模糊查询，精准查询）</h4><p>1、过滤输出，只获取想要的字段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &#x2F;&#x2F; 过滤输出，只获取想要的name字段</span><br><span class="line">    &quot;_source&quot;:[&quot;name&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/1.png" alt></p>
+<p>2、排序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &quot;sort&quot;:[</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;age&quot;: &#123;</span><br><span class="line">            &quot;order&quot;:&quot;asc&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/2.png" alt></p>
+<p>3、分页查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &quot;sort&quot;:[</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;age&quot;: &#123;</span><br><span class="line">            &quot;order&quot;:&quot;asc&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     ],</span><br><span class="line">    &quot;from&quot;:0,</span><br><span class="line">    &quot;size&quot;:2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数据下标还是从0开始，跟数据库一样</p>
+<ul>
+<li><code>from</code> 从第几个开始</li>
+<li><code>size</code> 返回多少条数据 相当于数据库的 limit 0, 2</li>
+</ul>
+<p>4、布尔值查询</p>
+<p><code>must</code> （and），所有的条件都要符合 where id = 1 and name = xxx</p>
+<p>多条件查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;name&quot;: &quot;end&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;age&quot;: 18</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>should</code> （or），所有的条件都要符合 where id = 1 or name = xxx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;should&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;name&quot;: &quot;end&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;age&quot;: 18</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>must_not</code> 也就是 <code>not</code> 查询</p>
+<p>查询 age 不是 18 的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must_not&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;age&quot;: &quot;18&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤器 <code>filter</code>，对数据进行过滤</p>
+<p>获取 <code>name</code> = rakishly 的数据，过滤出 <code>age</code> &gt;= 20 and <code>age</code> &lt;= 25</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;age&quot;: &#123;</span><br><span class="line">            &quot;gte&quot;: 20,</span><br><span class="line">            &quot;lte&quot;: 25</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>gt 大于</li>
+<li>gte 大于等于</li>
+<li>lt 小于</li>
+<li>lte 小于等于！</li>
+</ul>
+<p>5 、匹配多个条件</p>
+<p>使用空格隔开，只要满足其中一个结果既可以被查出，可以通过分值基本的判断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;end end1111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/3.png" alt></p>
+<p>6、精准查询</p>
+<p><code>term</code> 查询是直接通过倒排索引指定的词条进程精确查找的！</p>
+<p>关于分词：</p>
+<ul>
+<li><code>term</code> 直接查询精确的</li>
+<li><code>match</code> 会使用分词器解析！（先分析文档，然后在通过分析的文档进行查询！）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">put &#x2F;customer&#x2F;doc&#x2F;6</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;:&quot;php是世界上最好的语言&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;世界&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;世界&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>match</code> 查询就会进行分词，比如”php是世界上最好的语言”会被分词为”php 是 世界 上 最好 的 语言”, 所有有关”php 是 世界 上 最好 的 语言”, 那么所有包含这几个词中的一个或多个的文档就会被搜索出来。</p>
+<p><code>term</code> 查询 会去倒排索引中寻找确切的term，它并不知道分词器的存在，这种查询适合keyword、numeric、date等明确值。</p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/4.png" alt></p>
+<p>7、高亮查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;php&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;:&#123;</span><br><span class="line">    &quot;fields&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/5.png" alt></p>
+<p>自定义搜索高亮条件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;php&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;:&#123;</span><br><span class="line">    &quot;pre_tags&quot;: &quot;&lt;p class&#x3D;&#39;key&#39; style&#x3D;&#39;color:red&#39;&gt;&quot;, </span><br><span class="line">    &quot;post_tags&quot;: &quot;&lt;&#x2F;p&gt;&quot;, </span><br><span class="line">    &quot;fields&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>成功返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 15,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 1,</span><br><span class="line">    &quot;max_score&quot;: 0.5987304,</span><br><span class="line">    &quot;hits&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">        &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">        &quot;_id&quot;: &quot;6&quot;,</span><br><span class="line">        &quot;_score&quot;: 0.5987304,</span><br><span class="line">        &quot;_source&quot;: &#123;</span><br><span class="line">          &quot;name&quot;: &quot;php是世界上最好的语言&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;highlight&quot;: &#123;</span><br><span class="line">          &quot;name&quot;: [</span><br><span class="line">            &quot;&lt;p class&#x3D;&#39;key&#39; style&#x3D;&#39;color:red&#39;&gt;php&lt;&#x2F;p&gt;是世界上最好的语言&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/08/17/3es-curd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -417,7 +621,13 @@
 <p>扩展： 通过命令 elasticsearch 索引情况！ 通过 <code>get _cat/indices?v</code> 可以获得es的当前的很多信息！</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;_cat&#x2F;indices?v</span><br></pre></td></tr></table></figure>
-<h4 id="3、修改索引-还是用-PUT方法覆盖原来的值"><a href="#3、修改索引-还是用-PUT方法覆盖原来的值" class="headerlink" title="3、修改索引,还是用 PUT方法覆盖原来的值"></a>3、修改索引,还是用 PUT方法覆盖原来的值</h4><h4 id="4、查询索引"><a href="#4、查询索引" class="headerlink" title="4、查询索引"></a>4、查询索引</h4><p>1、查询索引所有数据</p>
+<h4 id="3、修改索引"><a href="#3、修改索引" class="headerlink" title="3、修改索引"></a>3、修改索引</h4><p>1、还是用 PUT 方式覆盖原来的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">put &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;:&quot;end&quot;,</span><br><span class="line">  &quot;age&quot; : 18</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、使用 post 方式，灵活性较好，推荐使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;1&#x2F;_update</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot; : &#123;</span><br><span class="line">    &quot;name&quot;:&quot;end1111&quot;,</span><br><span class="line">    &quot;age&quot; : 20</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="4、查询索引"><a href="#4、查询索引" class="headerlink" title="4、查询索引"></a>4、查询索引</h4><p>1、查询索引所有数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;customer&#x2F;doc&#x2F;_search</span><br></pre></td></tr></table></figure>
 <p>返回:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;took&quot;: 10,</span><br><span class="line">    &quot;timed_out&quot;: false,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 5,</span><br><span class="line">        &quot;successful&quot;: 5,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;hits&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;max_score&quot;: 1.0,</span><br><span class="line">        &quot;hits&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;2&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;rassss&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">                &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">                &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">                &quot;_score&quot;: 1.0,</span><br><span class="line">                &quot;_source&quot;: &#123;</span><br><span class="line">                    &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -429,7 +639,7 @@
 <li><code>max_score</code> 找到的最相关文件的分数</li>
 <li><code>hits.total</code> 找到了多少个匹配的文档</li>
 <li><code>hits.sort</code> 文档的排序（不按相关性得分排序时）</li>
-<li><code>hits._score</code> 文档的相关性得分（使用时不适用 match_all）</li>
+<li><code>hits._score</code> 文档的相关性得分，匹配度越高分值越高（使用时不适用 match_all）</li>
 </ul>
 <p>2、通过文档id查询数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line"></span><br><span class="line">成功返回：</span><br><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 2,</span><br><span class="line">    &quot;found&quot;: true,</span><br><span class="line">    &quot;_source&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;end111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1783,7 +1993,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
