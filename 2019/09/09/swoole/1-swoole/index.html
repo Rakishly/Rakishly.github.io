@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="Elasticsearch," />
+  <meta name="keywords" content="swoole," />
 
 
 
@@ -83,20 +83,19 @@
 
 
 
-<meta name="description" content="Kibana是一个通过调用elasticsearch服务器进行图形化展示搜索结果的开源项目。下载地址：https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.3.0-linux-x86_64.tar.gz  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&amp;#">
+<meta name="description" content="首先了解同步和异步 同步与异步12345678同步：对于程序的执行流程来说，一般是从上而下的方式来执行， 除非遇到流程控制语句会有一些变化，但是原则上都会遵循这个原则； 对于PHP来说在单线程的模式下那么一个进程在执行PHP代码的时候就会从第一行执 行到最后一行，那么这个过程我们就可以认为这是同步的，如果中间遇到了sleep()就不得不等待一下执行； 异步：这种模式基本上可以满足于很多的应用场景（">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS7下部署ELK--kibana篇（二）">
-<meta property="og:url" content="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/index.html">
+<meta property="og:title" content="swoole 学习（一）- 阻塞与非阻塞 长连接">
+<meta property="og:url" content="http://blog.rakishly.xyz/2019/09/09/swoole/1-swoole/index.html">
 <meta property="og:site_name" content="Rakishly">
-<meta property="og:description" content="Kibana是一个通过调用elasticsearch服务器进行图形化展示搜索结果的开源项目。下载地址：https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.3.0-linux-x86_64.tar.gz  安装1234$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&amp;#">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/4.png">
-<meta property="og:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/5.png">
-<meta property="article:published_time" content="2020-06-11T05:47:18.000Z">
-<meta property="article:modified_time" content="2020-08-18T06:56:20.485Z">
+<meta property="og:description" content="首先了解同步和异步 同步与异步12345678同步：对于程序的执行流程来说，一般是从上而下的方式来执行， 除非遇到流程控制语句会有一些变化，但是原则上都会遵循这个原则； 对于PHP来说在单线程的模式下那么一个进程在执行PHP代码的时候就会从第一行执 行到最后一行，那么这个过程我们就可以认为这是同步的，如果中间遇到了sleep()就不得不等待一下执行； 异步：这种模式基本上可以满足于很多的应用场景（">
+<meta property="og:image" content="http://images.rakishly.xyz/swoole/1/1.png">
+<meta property="article:published_time" content="2019-09-09T14:42:44.000Z">
+<meta property="article:modified_time" content="2020-09-09T15:10:28.039Z">
 <meta property="article:author" content="Rakishly">
-<meta property="article:tag" content="Elasticsearch">
+<meta property="article:tag" content="swoole">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/4.png">
+<meta name="twitter:image" content="http://images.rakishly.xyz/swoole/1/1.png">
 
 
 
@@ -128,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/"/>
+  <link rel="canonical" href="http://blog.rakishly.xyz/2019/09/09/swoole/1-swoole/"/>
 
 
 
 
 
-  <title>CentOS7下部署ELK--kibana篇（二） | Rakishly</title>
+  <title>swoole 学习（一）- 阻塞与非阻塞 长连接 | Rakishly</title>
   
 
 
@@ -251,7 +250,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2020/06/11/elk-install-kibana/">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2019/09/09/swoole/1-swoole/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Rakishly">
@@ -268,7 +267,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CentOS7下部署ELK--kibana篇（二）</h1>
+          <h1 class="post-title" itemprop="name headline">swoole 学习（一）- 阻塞与非阻塞 长连接</h1>
         
 
         <div class="post-meta">
@@ -280,8 +279,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-11T13:47:18+08:00">
-                2020-06-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-09T22:42:44+08:00">
+                2019-09-09
               </time>
             
 
@@ -303,8 +302,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
-                    <span itemprop="name">Elasticsearch</span>
+                  <a href="/categories/swoole/" itemprop="url" rel="index">
+                    <span itemprop="name">swoole</span>
                   </a>
                 </span>
 
@@ -340,18 +339,17 @@
       
 
       
-        <blockquote>
-<p><code>Kibana</code>是一个通过调用<code>elasticsearch</code>服务器进行图形化展示搜索结果的开源项目。下载地址：<a href="https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-linux-x86_64.tar.gz" target="_blank" rel="noopener">https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-linux-x86_64.tar.gz</a></p>
-</blockquote>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;kibana&#x2F;kibana-6.3.0-linux-x86_64.tar.gz</span><br><span class="line">$ tar -zxvf kibana-6.3.0-linux-x86_64.tar.gz</span><br><span class="line">$ cd kibana-6.3.0-linux-x86_64</span><br><span class="line">$ vim config&#x2F;kibana.yml</span><br></pre></td></tr></table></figure>
-<p>主要修改这几个参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.port: 5601    #监听端口</span><br><span class="line">server.host: &quot;192.168.1.31&quot;    #监听地址</span><br><span class="line">elasticsearch.hosts: [&quot;http:&#x2F;&#x2F;192.168.1.31:9200&quot;]    #elasticsearch服务器地址</span><br><span class="line">i18n.locale: &quot;zh-CN&quot;    #修改为中文</span><br></pre></td></tr></table></figure>
-<p>然后启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;kibana &amp;</span><br></pre></td></tr></table></figure>
-<p>出现这个证明启动成功</p>
-<p><img src="4.png" alt=""></p>
-<p>访问 <code>http://localhost:5601</code></p>
-<p><img src="5.png" alt=""></p>
+        <p>首先了解同步和异步</p>
+<h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">同步：</span><br><span class="line">对于程序的执行流程来说，一般是从上而下的方式来执行， 除非遇到流程控制语句会有一些变化，但是原则上都会遵循这个原则； </span><br><span class="line">对于PHP来说在单线程的模式下那么一个进程在执行PHP代码的时候就会从第一行执 行到最后一行，</span><br><span class="line">那么这个过程我们就可以认为这是同步的，如果中间遇到了sleep()就不得不等待一下执行；</span><br><span class="line"> </span><br><span class="line">异步：</span><br><span class="line">这种模式基本上可以满足于很多的应用场景（但是并不是绝对的）比如：像微信 在网站上登入的时候就会发一条信息在自己的微信账号上提醒你登入了 ， </span><br><span class="line">再比如一份订单生成了之后对于用户来说并不会立即收到货，而这个发货的过程我们就可以做成异步的任务由 库存模块处理 等等操作；</span><br></pre></td></tr></table></figure>
+
+<h3 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">阻塞：意思就是在那里等待，要等别人执行完成才能往下去执行； </span><br><span class="line">非阻塞：就是程序可以不用等待执行的结果，就可以进行下一步的操作；</span><br><span class="line"></span><br><span class="line">比如：linux上面执行 yum install vim，问你是否确定安装，不输入 yes 的话，它就一直在那里等着，这就是阻塞。</span><br><span class="line">非阻塞的话，就是你在下载1g的种子，浏览器可以挂在那里下着，同时你也可以找别的片在线播放。</span><br></pre></td></tr></table></figure>
+
+<p>对于阻塞与非阻塞的专有称呼有，<code>同步阻塞</code>，<code>同步非阻塞</code>，<code>异步阻塞</code>，<code>异步非阻塞</code>；<br>而实际上我们并不需要关注同步非阻塞与异步阻塞，<br>同步非阻塞在实现的过程中会存在一些复杂度可以采用异步非阻塞的方式巧妙地 解决好；<br>而异步阻塞其实本身意义就并不大</p>
+<h3 id="长连接与短连接"><a href="#长连接与短连接" class="headerlink" title="长连接与短连接"></a>长连接与短连接</h3><p>须知：服务器建立和关闭连接均是会有资源的消耗的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">长连接：其实就是一直连接的方式。连接-&gt;传输数据-&gt;保持连接 -&gt; 传输数据-&gt; ...........-&gt;直到一方关闭连接，多是客户端关闭连接。</span><br><span class="line">短连接：主要是建立一次连接，就没有了。连接-&gt;传输数据-&gt;关闭连接</span><br><span class="line"></span><br><span class="line">比如：在做即时聊天的时候-》QQ，不管是客户端还是服务端；在用户发送了消息之后就需要能接收到并且又能够接收到服务器发送的消息；</span><br><span class="line">我们可以通过与ajax来实现这个功能 但是ajax在实现代码的时候因为它的特点只能是主动请求,</span><br><span class="line">因此如果我们需要用ajax来实现的话那么这个时候就不得不让ajax进行轮询；</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://images.rakishly.xyz/swoole/1/1.png" alt=""></p>
+<p>可以看到前台不断的通过ajax请求与后台获取数据； 并进行响应和输出；如果说是单台服务器并且只是单个连接，其实问题不大；<br>但是如果说链接很多那么服务器就会存在这很大的压力； 在这个过程中服务器会不断 的创建连接关闭连接会消耗很多不必要的资源；<br>这个时候短连接就无法满足与我们项目的功能的需要 因此就需要长连接的帮助了；其实还存在一个问题服务端也需要主动发送消息给客户端；</p>
 
       
     </div>
@@ -369,7 +367,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+            <a href="/tags/swoole/" rel="tag"># swoole</a>
           
         </div>
       
@@ -382,8 +380,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/10/elk-install-es/" rel="next" title="CentOS7下部署ELK--Elasticsearch篇（一）">
-                <i class="fa fa-chevron-left"></i> CentOS7下部署ELK--Elasticsearch篇（一）
+              <a href="/2019/09/09/swoole/2-swoole/" rel="next" title="swoole 学习（二）- 心跳检测">
+                <i class="fa fa-chevron-left"></i> swoole 学习（二）- 心跳检测
               </a>
             
           </div>
@@ -392,8 +390,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/06/11/elk-install-logstash/" rel="prev" title="CentOS7下部署ELK--Logstash篇（三）">
-                CentOS7下部署ELK--Logstash篇（三） <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/19/xdebug/" rel="prev" title="phpstorm + xdebug 断点调试">
+                phpstorm + xdebug 断点调试 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -536,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步与异步"><span class="nav-number">1.</span> <span class="nav-text">同步与异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞与非阻塞"><span class="nav-number">2.</span> <span class="nav-text">阻塞与非阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长连接与短连接"><span class="nav-number">3.</span> <span class="nav-text">长连接与短连接</span></a></li></ol></div>
             
 
           </div>

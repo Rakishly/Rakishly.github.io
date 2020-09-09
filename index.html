@@ -347,10 +347,10 @@
 <p>返回参数说明可以看基本操作那一节： <a href="https://blog.rakishly.xyz/2020/08/17/3es-curd/">https://blog.rakishly.xyz/2020/08/17/3es-curd/</a></p>
 <h4 id="复杂操作查询（排序，分页，高亮，模糊查询，精准查询）"><a href="#复杂操作查询（排序，分页，高亮，模糊查询，精准查询）" class="headerlink" title="复杂操作查询（排序，分页，高亮，模糊查询，精准查询）"></a>复杂操作查询（排序，分页，高亮，模糊查询，精准查询）</h4><p>1、过滤输出，只获取想要的字段</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &#x2F;&#x2F; 过滤输出，只获取想要的name字段</span><br><span class="line">    &quot;_source&quot;:[&quot;name&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/1.png" alt></p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/1.png" alt=""></p>
 <p>2、排序</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &quot;sort&quot;:[</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;age&quot;: &#123;</span><br><span class="line">            &quot;order&quot;:&quot;asc&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/2.png" alt></p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/2.png" alt=""></p>
 <p>3、分页查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">post customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;query&quot;:&#123;</span><br><span class="line">     &quot;match&quot;: &#123;</span><br><span class="line">       &quot;name&quot;: &quot;rakishly&quot;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;,</span><br><span class="line">   &quot;sort&quot;:[</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;age&quot;: &#123;</span><br><span class="line">            &quot;order&quot;:&quot;asc&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     ],</span><br><span class="line">    &quot;from&quot;:0,</span><br><span class="line">    &quot;size&quot;:2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>数据下标还是从0开始，跟数据库一样</p>
@@ -383,7 +383,7 @@
 <p>使用空格隔开，只要满足其中一个结果既可以被查出，可以通过分值基本的判断</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;end end1111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/3.png" alt></p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/3.png" alt=""></p>
 <p>6、精准查询</p>
 <p><code>term</code> 查询是直接通过倒排索引指定的词条进程精确查找的！</p>
 <p>关于分词：</p>
@@ -395,10 +395,10 @@
 
 <p>使用 <code>match</code> 查询就会进行分词，比如”php是世界上最好的语言”会被分词为”php 是 世界 上 最好 的 语言”, 所有有关”php 是 世界 上 最好 的 语言”, 那么所有包含这几个词中的一个或多个的文档就会被搜索出来。</p>
 <p><code>term</code> 查询 会去倒排索引中寻找确切的term，它并不知道分词器的存在，这种查询适合keyword、numeric、date等明确值。</p>
-<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/4.png" alt></p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/4.png" alt=""></p>
 <p>7、高亮查询</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;php&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;:&#123;</span><br><span class="line">    &quot;fields&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/5.png" alt></p>
+<p><img src="http://images.rakishly.xyz/elasticsearch/4es-query/5.png" alt=""></p>
 <p>自定义搜索高亮条件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">post &#x2F;customer&#x2F;doc&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;php&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;:&#123;</span><br><span class="line">    &quot;pre_tags&quot;: &quot;&lt;p class&#x3D;&#39;key&#39; style&#x3D;&#39;color:red&#39;&gt;&quot;, </span><br><span class="line">    &quot;post_tags&quot;: &quot;&lt;&#x2F;p&gt;&quot;, </span><br><span class="line">    &quot;fields&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>成功返回：</p>
@@ -587,7 +587,7 @@
 <h4 id="1、创建一个索引"><a href="#1、创建一个索引" class="headerlink" title="1、创建一个索引"></a>1、创建一个索引</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;索引名&#x2F;~类型名~&#x2F;文档id</span><br><span class="line">&#123;请求体&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;John Doe&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果报 <code>index_not_found_exception</code> 错误，打开 <code>elasticsearch.yml</code> 配置文件，将 <code>auto_create_index</code> 设置成 <code>true</code></p>
-<p><img src="/2020/08/17/3es-curd/1.png" alt></p>
+<p><img src="1.png" alt=""></p>
 <p>创建成功，返回：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 1,</span><br><span class="line">    &quot;result&quot;: &quot;created&quot;,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;successful&quot;: 1,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;created&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -595,7 +595,7 @@
 <p><code>result</code> 如果是修改的话，值是 updated</p>
 </blockquote>
 <p>打开 <code>elasticsearch-head</code> 查看（如果没有安装的话，自行百度安装）</p>
-<p><img src="/2020/08/17/3es-curd/2.png" alt></p>
+<p><img src="2.png" alt=""></p>
 <p>这就是我们可以把它当成数据库学习的原因！是不是贼像！</p>
 <p>那么问题来了，用不用指定数据类型，毕竟我们的数据库是有数据类型的啊</p>
 <ul>
@@ -883,7 +883,7 @@
 <blockquote>
 <p>一个集群至少有一个节点，而一个节点就是一个elasricsearch进程，节点可以有多个索引默认的，如果 你创建索引，那么索引将会有个5个分片 ( primary shard ,又称主分片 ) 构成的，每一个主分片会有一个 副本 ( replica shard ,又称复制分片 )</p>
 </blockquote>
-<p><img src="/2020/08/13/2es-gainian/markdown-img-paste-20200807195126812.png" alt></p>
+<p><img src="markdown-img-paste-20200807195126812.png" alt=""></p>
 <p>上图是一个有3个节点的集群，可以看到主分片和对应的复制分片都不会在同一个节点内，这样有利于某 个节点挂掉 了，数据也不至于丢失。 实际上，一个分片是一个Lucene索引，一个包含倒排索引的文件 目录，倒排索引的结构使 得elasticsearch在不扫描全部文档的情况下，就能告诉你哪些文档包含特定的 关键字。 不过，等等，倒排索引是什 么鬼?</p>
 <h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><blockquote>
 <p>elasticsearch使用的是一种称为倒排索引的结构，采用Lucene倒排索作为底层。这种结构适用于快速的 全文搜索， 一个索引由文档中所有不重复的列表构成，对于每一个词，都有一个包含它的文档列表。 例 如，现在有两个文档， 每个文档包含如下内容：</p>
@@ -893,7 +893,7 @@
 <p>现在，我们试图搜索 to forever，只需要查看包含每个词条的文档 | term | doc_1 | doc_2 | | ——- | —– | —– | | to | √ | × | | forever | √ | √ | | total | 2 | 1 |</p>
 <p>两个文档都匹配，但是第一个文档比第二个匹配程度更高。如果没有别的条件，现在，这两个包含关键 字的文档都将返回。</p>
 <p>再来看一个示例，比如我们通过博客标签来搜索博客文章。那么倒排索引列表就是这样的一个结构 :</p>
-<p><img src="/2020/08/13/2es-gainian/1.png" alt></p>
+<p><img src="1.png" alt=""></p>
 <p>如果要搜索含有 python 标签的文章，那相对于查找所有原始数据而言，查找倒排索引后的数据将会快 的多。只需要 查看标签这一栏，然后获取相关的文章ID即可。完全过滤掉无关的所有数据，提高效率！</p>
 <p>elasticsearch的索引和Lucene的索引对比</p>
 <p>在elasticsearch中， 索引 （库）这个词被频繁使用，这就是术语的使用。 在elasticsearch中，索引被 分为多个分片，每份 分片是一个Lucene的索引。所以一个elasticsearch索引是由多个Lucene索引组成 的。别问为什么，谁让elasticsearch使用Lucene作为底层呢! 如无特指，说起索引都是指elasticsearch 的索引。</p>
@@ -1039,12 +1039,12 @@
       
         
           
-            <h3 id="tp5-1-layuimini-搭建后台-效果如图"><a href="#tp5-1-layuimini-搭建后台-效果如图" class="headerlink" title="tp5.1 + layuimini 搭建后台 效果如图"></a>tp5.1 + layuimini 搭建后台 效果如图</h3><p><img src="https://oscimg.oschina.net/oscnet/up-6691e17598fa32b8c4b4fe8041ded7380db.png" alt></p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-ebe0b6758202ac724c2d954973083f0a1f1.png" alt></p>
+            <h3 id="tp5-1-layuimini-搭建后台-效果如图"><a href="#tp5-1-layuimini-搭建后台-效果如图" class="headerlink" title="tp5.1 + layuimini 搭建后台 效果如图"></a>tp5.1 + layuimini 搭建后台 效果如图</h3><p><img src="https://oscimg.oschina.net/oscnet/up-6691e17598fa32b8c4b4fe8041ded7380db.png" alt=""></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-ebe0b6758202ac724c2d954973083f0a1f1.png" alt=""></p>
 <h4 id="首先下载layuimini"><a href="#首先下载layuimini" class="headerlink" title="首先下载layuimini"></a>首先下载layuimini</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;gitee.com&#x2F;zhongshaofa&#x2F;layuimini&#x2F;tree&#x2F;v2</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://oscimg.oschina.net/oscnet/up-121d10c5caa47f797bd1653ef4eae245cef.png" alt></p>
-<p><strong>复制 index.html，将静态资源的路径改为自己的路径</strong> <img src="https://oscimg.oschina.net/oscnet/up-449442e044363d03a4e855d952c1ba7a450.png" alt></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-121d10c5caa47f797bd1653ef4eae245cef.png" alt=""></p>
+<p><strong>复制 index.html，将静态资源的路径改为自己的路径</strong> <img src="https://oscimg.oschina.net/oscnet/up-449442e044363d03a4e855d952c1ba7a450.png" alt=""></p>
 <p>这里的初始化接口改为自己的菜单接口，返回数据的格式要跟他的<code>init.json</code>文件的格式一致。 我的表结构是这样</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">array(27) &#123;</span><br><span class="line">  [0] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuA1&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;常规管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [1] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(3)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuA3&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;系统设置&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(3)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [2] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(184)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuB6&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(15) &quot;道具卡管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(13)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [3] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(194)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuB7&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;通用管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(14)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [4] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(219)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuB8&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;用户管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(15)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [5] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(221)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(7) &quot;&#x2F;MenuB9&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;发布管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(16)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [6] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(36)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(9) &quot;&#x2F;Personal&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(12) &quot;我的账户&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(3)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(33)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [7] &#x3D;&gt; array(13) &#123;</span><br><span class="line">    [&quot;id&quot;] &#x3D;&gt; int(19)</span><br><span class="line">    [&quot;name&quot;] &#x3D;&gt; string(10) &quot;&#x2F;AdminUser&quot;</span><br><span class="line">    [&quot;title&quot;] &#x3D;&gt; string(15) &quot;管理员管理&quot;</span><br><span class="line">    [&quot;type&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;pid&quot;] &#x3D;&gt; int(3)</span><br><span class="line">    [&quot;condition&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;icon&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;is_menu&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;is_quick&quot;] &#x3D;&gt; int(0)</span><br><span class="line">    [&quot;status&quot;] &#x3D;&gt; int(1)</span><br><span class="line">    [&quot;sort&quot;] &#x3D;&gt; int(35)</span><br><span class="line">    [&quot;href&quot;] &#x3D;&gt; string(0) &quot;&quot;</span><br><span class="line">    [&quot;target&quot;] &#x3D;&gt; string(5) &quot;_self&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
@@ -1055,25 +1055,25 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$newMenu  &#x3D; toMenu($menu);</span><br><span class="line">       $data &#x3D; [</span><br><span class="line">           &#39;homeInfo&#39; &#x3D;&gt; [</span><br><span class="line">               &#39;title&#39; &#x3D;&gt; &#39;首页&#39;,</span><br><span class="line">               &#39;href&#39; &#x3D;&gt; &#39;&#x2F;admin&#x2F;index&#x2F;welcome&#39;,</span><br><span class="line">           ],</span><br><span class="line">           &#39;logoInfo&#39; &#x3D;&gt; [</span><br><span class="line">               &#39;title&#39; &#x3D;&gt; &#39;LAYUI MINI&#39;,</span><br><span class="line">               &#39;image&#39; &#x3D;&gt; &#39;&#x2F;static&#x2F;admin&#x2F;images&#x2F;logo.png&#39;,</span><br><span class="line">               &#39;href&#39; &#x3D;&gt; &#39;&#39;</span><br><span class="line">           ],</span><br><span class="line">           &#39;menuInfo&#39; &#x3D;&gt; $newMenu</span><br><span class="line">       ];</span><br><span class="line">       echo json_encode($data);</span><br><span class="line">       exit;</span><br></pre></td></tr></table></figure>
 
 <p>这样菜单就显示出来了</p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-def8592c3461537e50d65e846764e1c4c39.png" alt></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-def8592c3461537e50d65e846764e1c4c39.png" alt=""></p>
 <h4 id="列表页面"><a href="#列表页面" class="headerlink" title="列表页面"></a>列表页面</h4><p>复制<code>layuimini/page/table.html</code></p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-d06371ea8f1605d682f3a873097c8596a9f.png" alt></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-d06371ea8f1605d682f3a873097c8596a9f.png" alt=""></p>
 <p><strong>把url改成自己的接口，返回的数据结构看下<code>table.json</code></strong></p>
 <p>cols 里面的field 改成自己接口返回的字段，再把tatle改成自己想要的，可以改样式，还有一些参数配置，可以看 layui 表格那块的文档</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public function selectData()</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F;搜索功能</span><br><span class="line">        &#x2F;&#x2F;layuimini 把搜索参数放在 searchParams对象里面</span><br><span class="line">        $title &#x3D; input(&#39;searchParams.title&#39;, &#39;&#39;, &#39;htmlspecialchars,trim&#39;);</span><br><span class="line"></span><br><span class="line">        $page &#x3D; input(&#39;page&#39;, &#39;1&#39;);</span><br><span class="line">        $limit &#x3D; input(&#39;limit&#39;, &#39;10&#39;);</span><br><span class="line">        $where &#x3D; new Where;</span><br><span class="line">        if (!empty($title)) &#123;</span><br><span class="line">            $where[&#39;title&#39;] &#x3D; array(&#39;LIKE&#39;, &quot;%&#123;$title&#125;%&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        $count &#x3D; db(&#39;activity&#39;)-&gt;where($where)-&gt;count();</span><br><span class="line"></span><br><span class="line">        $firstRow &#x3D; ($page - 1) * $limit;</span><br><span class="line">        $art &#x3D; db(&#39;activity&#39;)-&gt;where($where)-&gt;order(&#39;activity_id DESC&#39;)-&gt;limit($firstRow, $limit)-&gt;select();</span><br><span class="line">       </span><br><span class="line">        $data &#x3D; [</span><br><span class="line">            &#39;code&#39; &#x3D;&gt; 0,</span><br><span class="line">            &#39;count&#39; &#x3D;&gt; $count,</span><br><span class="line">            &#39;msg&#39; &#x3D;&gt; &#39;&#39;,</span><br><span class="line">            &#39;data&#39; &#x3D;&gt; $art</span><br><span class="line">        ];</span><br><span class="line">        exit(json_encode($data));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>这样列表页面就好了 <img src="https://oscimg.oschina.net/oscnet/up-1a9e838f3b1c8ebe65945e96d5fed4844dc.png" alt></p>
+<p>这样列表页面就好了 <img src="https://oscimg.oschina.net/oscnet/up-1a9e838f3b1c8ebe65945e96d5fed4844dc.png" alt=""></p>
 <h4 id="添加数据页面"><a href="#添加数据页面" class="headerlink" title="添加数据页面"></a>添加数据页面</h4><p>复制 <code>layuimini/page/table/add.html</code></p>
 <p>具体的表单元素可以看下 <code>page/table.html</code> 这个页面</p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-d315b01001c7edd9fc98583e9a6e1cec3c1.png" alt></p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-9245bf8ec234156c76493e4789ce20fc8bc.png" alt></p>
-<p><img src="https://oscimg.oschina.net/oscnet/up-812d74fa42e6def65e0e1f866db37b541ba.png" alt></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-d315b01001c7edd9fc98583e9a6e1cec3c1.png" alt=""></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-9245bf8ec234156c76493e4789ce20fc8bc.png" alt=""></p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-812d74fa42e6def65e0e1f866db37b541ba.png" alt=""></p>
 <blockquote>
 <p>需要注意的是执行异步完要 <code>return false</code> 不然 添加页面的 iframe 不会关闭，列表页面也不会刷新，虽然数据是添加成功了</p>
 </blockquote>
-<h4 id="修改页面跟添加页面差不多"><a href="#修改页面跟添加页面差不多" class="headerlink" title="修改页面跟添加页面差不多"></a>修改页面跟添加页面差不多</h4><p><img src="https://oscimg.oschina.net/oscnet/up-69cdab3e802e73366c505ba932a1b2c7e88.png" alt></p>
+<h4 id="修改页面跟添加页面差不多"><a href="#修改页面跟添加页面差不多" class="headerlink" title="修改页面跟添加页面差不多"></a>修改页面跟添加页面差不多</h4><p><img src="https://oscimg.oschina.net/oscnet/up-69cdab3e802e73366c505ba932a1b2c7e88.png" alt=""></p>
 <p>就是表单赋值可以在js这里，也可以在上面的html里面。</p>
-<h4 id="菜单权限页面"><a href="#菜单权限页面" class="headerlink" title="菜单权限页面"></a>菜单权限页面</h4><p><img src="https://oscimg.oschina.net/oscnet/up-377594528ff66a7affb7521931e80b3107f.png" alt> 由于 layuimini menu.html 这个页面提供不了全选，半选，点击父菜单，全选子菜单的功能，我又不会写js 固下载 <code>treetable-lay</code></p>
+<h4 id="菜单权限页面"><a href="#菜单权限页面" class="headerlink" title="菜单权限页面"></a>菜单权限页面</h4><p><img src="https://oscimg.oschina.net/oscnet/up-377594528ff66a7affb7521931e80b3107f.png" alt=""> 由于 layuimini menu.html 这个页面提供不了全选，半选，点击父菜单，全选子菜单的功能，我又不会写js 固下载 <code>treetable-lay</code></p>
 <p><a href="https://gitee.com/whvse/treetable-lay" target="_blank" rel="noopener">https://gitee.com/whvse/treetable-lay</a> 具体参数可以看下开发文档</p>
 <p>复制 <code>treetable-lay/demo/index.html</code> 根据自己的需求修改</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line">layui.config(&#123;</span><br><span class="line">       &#x2F;&#x2F; treeTable.js存放的路径</span><br><span class="line">       base: &#39;__JS__&#x2F;&#39;</span><br><span class="line">   &#125;).use([&#39;layer&#39;, &#39;util&#39;, &#39;treeTable&#39;], function () &#123;</span><br><span class="line">       var $ &#x3D; layui.jquery;</span><br><span class="line">       var layer &#x3D; layui.layer;</span><br><span class="line">       var util &#x3D; layui.util;</span><br><span class="line">       var treeTable &#x3D; layui.treeTable;</span><br><span class="line">       $(&#39;body&#39;).removeClass(&#39;layui-hide&#39;);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; 渲染表格</span><br><span class="line">       &#x2F;&#x2F;selectMenuData 获取所有菜单数据，返回格式参照 menus.json这个文件</span><br><span class="line">       var insTb &#x3D; treeTable.render(&#123;</span><br><span class="line">           elem: &#39;#demoTreeTb&#39;,</span><br><span class="line">           url: &#39;&#x2F;admin&#x2F;Auth&#x2F;selectMenuData&#39;,</span><br><span class="line">           toolbar: &#39;default&#39;,</span><br><span class="line">           tree: &#123;</span><br><span class="line">               iconIndex: 2,</span><br><span class="line">               isPidData: true,</span><br><span class="line">               idName: &#39;authorityId&#39;,</span><br><span class="line">               pidName: &#39;parentId&#39;</span><br><span class="line">           &#125;,</span><br><span class="line">           defaultToolbar: [&#39;filter&#39;, &#39;print&#39;, &#39;exports&#39;, &#123;</span><br><span class="line">               title: &#39;提示&#39;,</span><br><span class="line">               layEvent: &#39;LAYTABLE_TIPS&#39;,</span><br><span class="line">               icon: &#39;layui-icon-tips&#39;</span><br><span class="line">           &#125;],</span><br><span class="line">           cols: [</span><br><span class="line">               [</span><br><span class="line">                   &#123;type: &#39;checkbox&#39;&#125;,</span><br><span class="line">                   &#123;field: &#39;authorityId&#39;, width:50, title:&#39;ID&#39;&#125;,</span><br><span class="line">                   &#123;field: &#39;authorityName&#39;, title: &#39;菜单名称&#39;, minWidth: 165&#125;,</span><br><span class="line">                   &#123;</span><br><span class="line">                       title: &#39;菜单图标&#39;, align: &#39;center&#39;, hide: true,</span><br><span class="line">                       templet: &#39;&lt;p&gt;&lt;i class&#x3D;&quot;layui-icon &#123;&#123;d.menuIcon&#125;&#125;&quot;&gt;&lt;&#x2F;i&gt;&lt;&#x2F;p&gt;&#39;</span><br><span class="line">                   &#125;,</span><br><span class="line">                   &#123;field: &#39;menuUrl&#39;, title: &#39;菜单地址&#39;&#125;,</span><br><span class="line">                   &#123;title: &#39;类型&#39;, templet: &#39;&lt;p&gt;&#123;&#123;d.isMenu?&quot;菜单&quot;:&quot;按钮&quot;&#125;&#125;&lt;&#x2F;p&gt;&#39;, align: &#39;center&#39;, width: 60&#125;,</span><br><span class="line"></span><br><span class="line">                   &#123;align: &#39;center&#39;, toolbar: &#39;#tbBar&#39;, title: &#39;操作&#39;, width: 120&#125;</span><br><span class="line">               ]</span><br><span class="line">           ],</span><br><span class="line">           style: &#39;margin-top:0;&#39;,</span><br><span class="line"></span><br><span class="line">           </span><br><span class="line">           &#x2F;&#x2F; 这里渲染表格完成之后，调用selectRuleData方法获取当前所属的角色拥有的权限</span><br><span class="line">           &#x2F;&#x2F; 调用 insTb.setChecked(res.data); 设置复选框选中</span><br><span class="line">           &#x2F;&#x2F; res.data返回数组格式数据</span><br><span class="line">           done : function () &#123;</span><br><span class="line">               $.ajax(&#123;</span><br><span class="line">                   url : &#39;&#x2F;admin&#x2F;Auth&#x2F;selectRuleData&#39;,</span><br><span class="line">                   type : &#39;post&#39;,</span><br><span class="line">                   dataType : &#39;json&#39;,</span><br><span class="line">                   data : &#123;group_id:&quot;&#123;$Think.get.group_id&#125;&quot;&#125;,</span><br><span class="line">                   success : function (res) &#123;</span><br><span class="line">                       insTb.setChecked(res.data);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;);</span><br><span class="line"></span><br><span class="line">               &#x2F;&#x2F; 获取选中的数据</span><br><span class="line">               &#x2F;&#x2F; updateRule方法将当前选中的权限更新 </span><br><span class="line">               $(&#39;#btnGetChecked&#39;).click(function () &#123;</span><br><span class="line">                   var ids &#x3D; insTb.checkStatus().map(function (d) &#123;</span><br><span class="line">                       return d.authorityId;</span><br><span class="line">                   &#125;);</span><br><span class="line">                   $.ajax(&#123;</span><br><span class="line">                       url : &#39;&#x2F;admin&#x2F;Auth&#x2F;updateRule&#39;,</span><br><span class="line">                       type : &#39;post&#39;,</span><br><span class="line">                       dataType : &#39;json&#39;,</span><br><span class="line">                       data : &#123;group_id : &quot;&#123;$Think.get.group_id&#125;&quot;, ids : ids&#125;,</span><br><span class="line">                       success : function (res) &#123;</span><br><span class="line">                           if (res.code &#x3D;&#x3D; 1) &#123;</span><br><span class="line">                               layer.msg(res.msg);</span><br><span class="line">                               return false;</span><br><span class="line">                           &#125;</span><br><span class="line">                           insTb.reload();</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;);</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; 工具列点击事件</span><br><span class="line">       treeTable.on(&#39;tool(demoTreeTb)&#39;, function (obj) &#123;</span><br><span class="line">           var data &#x3D; obj.data;</span><br><span class="line">           if (obj.event &#x3D;&#x3D;&#x3D; &#39;add&#39;) &#123;</span><br><span class="line">               var index &#x3D; layer.open(&#123;</span><br><span class="line">                   title: &#39;添加菜单&#39;,</span><br><span class="line">                   type: 2,</span><br><span class="line">                   shade: 0.2,</span><br><span class="line">                   maxmin:true,</span><br><span class="line">                   shadeClose: true,</span><br><span class="line">                   area: [&#39;100%&#39;, &#39;100%&#39;],</span><br><span class="line">                   content: &#39;&#x2F;admin&#x2F;Auth&#x2F;addAccess?group_id&#x3D;&#123;$Think.get.group_id&#125;&amp;pid&#x3D;&#39; + data.authorityId,</span><br><span class="line">               &#125;);</span><br><span class="line">               $(window).on(&quot;resize&quot;, function () &#123;</span><br><span class="line">                   layer.full(index);</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125; else if (obj.event &#x3D;&#x3D;&#x3D; &#39;edit&#39;) &#123;</span><br><span class="line">               var index &#x3D; layer.open(&#123;</span><br><span class="line">                   title: &#39;编辑菜单&#39;,</span><br><span class="line">                   type: 2,</span><br><span class="line">                   shade: 0.2,</span><br><span class="line">                   maxmin:true,</span><br><span class="line">                   shadeClose: true,</span><br><span class="line">                   area: [&#39;100%&#39;, &#39;100%&#39;],</span><br><span class="line">                   content: &#39;&#x2F;admin&#x2F;Auth&#x2F;editAccess?group_id&#x3D;&#123;$Think.get.group_id&#125;&amp;id&#x3D;&#39; + data.authorityId,</span><br><span class="line">               &#125;);</span><br><span class="line">               $(window).on(&quot;resize&quot;, function () &#123;</span><br><span class="line">                   layer.full(index);</span><br><span class="line">               &#125;);</span><br><span class="line">               return false;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; 头部工具栏点击事件</span><br><span class="line">       treeTable.on(&#39;toolbar(demoTreeTb)&#39;, function (obj) &#123;</span><br><span class="line">           switch (obj.event) &#123;</span><br><span class="line">               case &#39;add&#39;:</span><br><span class="line">                   layer.msg(&#39;添加&#39;);</span><br><span class="line">                   break;</span><br><span class="line">               case &#39;delete&#39;:</span><br><span class="line">                   layer.msg(&#39;删除&#39;);</span><br><span class="line">                   break;</span><br><span class="line">               case &#39;update&#39;:</span><br><span class="line">                   layer.msg(&#39;编辑&#39;);</span><br><span class="line">                   break;</span><br><span class="line">               case &#39;LAYTABLE_TIPS&#39;:</span><br><span class="line">                   layer.msg(&#39;提示&#39;);</span><br><span class="line">                   break;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; 全部展开</span><br><span class="line">       $(&#39;#btnExpandAll&#39;).click(function () &#123;</span><br><span class="line">           insTb.expandAll();</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line">       &#x2F;&#x2F; 全部折叠</span><br><span class="line">       $(&#39;#btnFoldAll&#39;).click(function () &#123;</span><br><span class="line">           insTb.foldAll();</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure>
@@ -1408,14 +1408,14 @@
 <p>重启 logstash</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;logstash&#x2F;bin&#x2F;logstash -f &#x2F;etc&#x2F;logstash&#x2F;conf.d&#x2F;syslog.conf -r    #重启</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2020/06/11/elk-install-logstash/2.png" alt></p>
+<p><img src="2.png" alt=""></p>
 <p>表示成功</p>
 <p>elasticsearch-head界面查看</p>
-<p><img src="/2020/06/11/elk-install-logstash/1.png" alt></p>
+<p><img src="1.png" alt=""></p>
 <p>kibana界面创建索引并查看</p>
-<p><img src="/2020/06/11/elk-install-logstash/3.png" alt></p>
-<p><img src="/2020/06/11/elk-install-logstash/4.png" alt></p>
-<p><img src="/2020/06/11/elk-install-logstash/5.png" alt></p>
+<p><img src="3.png" alt=""></p>
+<p><img src="4.png" alt=""></p>
+<p><img src="5.png" alt=""></p>
 
           
         
@@ -1566,9 +1566,9 @@
 <p>然后启动</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin&#x2F;kibana &amp;</span><br></pre></td></tr></table></figure>
 <p>出现这个证明启动成功</p>
-<p><img src="/2020/06/11/elk-install-kibana/4.png" alt></p>
+<p><img src="4.png" alt=""></p>
 <p>访问 <code>http://localhost:5601</code></p>
-<p><img src="/2020/06/11/elk-install-kibana/5.png" alt></p>
+<p><img src="5.png" alt=""></p>
 
           
         
@@ -1947,9 +1947,165 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2019/09/09/swoole/1-swoole/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/09/swoole/1-swoole/" itemprop="url">swoole 学习（一）- 阻塞与非阻塞 长连接</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-09T22:42:44+08:00">
+                2019-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/swoole/" itemprop="url" rel="index">
+                    <span itemprop="name">swoole</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>首先了解同步和异步</p>
+<h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">同步：</span><br><span class="line">对于程序的执行流程来说，一般是从上而下的方式来执行， 除非遇到流程控制语句会有一些变化，但是原则上都会遵循这个原则； </span><br><span class="line">对于PHP来说在单线程的模式下那么一个进程在执行PHP代码的时候就会从第一行执 行到最后一行，</span><br><span class="line">那么这个过程我们就可以认为这是同步的，如果中间遇到了sleep()就不得不等待一下执行；</span><br><span class="line"> </span><br><span class="line">异步：</span><br><span class="line">这种模式基本上可以满足于很多的应用场景（但是并不是绝对的）比如：像微信 在网站上登入的时候就会发一条信息在自己的微信账号上提醒你登入了 ， </span><br><span class="line">再比如一份订单生成了之后对于用户来说并不会立即收到货，而这个发货的过程我们就可以做成异步的任务由 库存模块处理 等等操作；</span><br></pre></td></tr></table></figure>
+
+<h3 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">阻塞：意思就是在那里等待，要等别人执行完成才能往下去执行； </span><br><span class="line">非阻塞：就是程序可以不用等待执行的结果，就可以进行下一步的操作；</span><br><span class="line"></span><br><span class="line">比如：linux上面执行 yum install vim，问你是否确定安装，不输入 yes 的话，它就一直在那里等着，这就是阻塞。</span><br><span class="line">非阻塞的话，就是你在下载1g的种子，浏览器可以挂在那里下着，同时你也可以找别的片在线播放。</span><br></pre></td></tr></table></figure>
+
+<p>对于阻塞与非阻塞的专有称呼有，<code>同步阻塞</code>，<code>同步非阻塞</code>，<code>异步阻塞</code>，<code>异步非阻塞</code>；<br>而实际上我们并不需要关注同步非阻塞与异步阻塞，<br>同步非阻塞在实现的过程中会存在一些复杂度可以采用异步非阻塞的方式巧妙地 解决好；<br>而异步阻塞其实本身意义就并不大</p>
+<h3 id="长连接与短连接"><a href="#长连接与短连接" class="headerlink" title="长连接与短连接"></a>长连接与短连接</h3><p>须知：服务器建立和关闭连接均是会有资源的消耗的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">长连接：其实就是一直连接的方式。连接-&gt;传输数据-&gt;保持连接 -&gt; 传输数据-&gt; ...........-&gt;直到一方关闭连接，多是客户端关闭连接。</span><br><span class="line">短连接：主要是建立一次连接，就没有了。连接-&gt;传输数据-&gt;关闭连接</span><br><span class="line"></span><br><span class="line">比如：在做即时聊天的时候-》QQ，不管是客户端还是服务端；在用户发送了消息之后就需要能接收到并且又能够接收到服务器发送的消息；</span><br><span class="line">我们可以通过与ajax来实现这个功能 但是ajax在实现代码的时候因为它的特点只能是主动请求,</span><br><span class="line">因此如果我们需要用ajax来实现的话那么这个时候就不得不让ajax进行轮询；</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://images.rakishly.xyz/swoole/1/1.png" alt=""></p>
+<p>可以看到前台不断的通过ajax请求与后台获取数据； 并进行响应和输出；如果说是单台服务器并且只是单个连接，其实问题不大；<br>但是如果说链接很多那么服务器就会存在这很大的压力； 在这个过程中服务器会不断 的创建连接关闭连接会消耗很多不必要的资源；<br>这个时候短连接就无法满足与我们项目的功能的需要 因此就需要长连接的帮助了；其实还存在一个问题服务端也需要主动发送消息给客户端；</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -1993,7 +2149,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2004,7 +2160,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2015,7 +2171,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -384,7 +384,7 @@
 <h4 id="1、创建一个索引"><a href="#1、创建一个索引" class="headerlink" title="1、创建一个索引"></a>1、创建一个索引</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;索引名&#x2F;~类型名~&#x2F;文档id</span><br><span class="line">&#123;请求体&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;customer&#x2F;doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;John Doe&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果报 <code>index_not_found_exception</code> 错误，打开 <code>elasticsearch.yml</code> 配置文件，将 <code>auto_create_index</code> 设置成 <code>true</code></p>
-<p><img src="/2020/08/17/3es-curd/1.png" alt></p>
+<p><img src="1.png" alt=""></p>
 <p>创建成功，返回：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;: &quot;customer&quot;,</span><br><span class="line">    &quot;_type&quot;: &quot;doc&quot;,</span><br><span class="line">    &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;: 1,</span><br><span class="line">    &quot;result&quot;: &quot;created&quot;,</span><br><span class="line">    &quot;_shards&quot;: &#123;</span><br><span class="line">        &quot;total&quot;: 2,</span><br><span class="line">        &quot;successful&quot;: 1,</span><br><span class="line">        &quot;failed&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;created&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -392,7 +392,7 @@
 <p><code>result</code> 如果是修改的话，值是 updated</p>
 </blockquote>
 <p>打开 <code>elasticsearch-head</code> 查看（如果没有安装的话，自行百度安装）</p>
-<p><img src="/2020/08/17/3es-curd/2.png" alt></p>
+<p><img src="2.png" alt=""></p>
 <p>这就是我们可以把它当成数据库学习的原因！是不是贼像！</p>
 <p>那么问题来了，用不用指定数据类型，毕竟我们的数据库是有数据类型的啊</p>
 <ul>
@@ -586,7 +586,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -597,7 +597,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -608,7 +608,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
