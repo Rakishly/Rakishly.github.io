@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nginx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="配置文件解释main （全局设置）， main 部分设置的指令将影响其它所有部分的设置；  http (http服务器设置)，http标准核心模块，http服务的相应配置 server （主机设置） 接收请求的服务器需要将不同的请求按规则转发到不同的后端服务器上，在 nginx 中我们可以通过构建虚拟主机（ server ）的概念来将这些不同的服务配置隔 离 location （URL匹配特定位置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx配置文件">
+<meta property="og:url" content="http://blog.rakishly.xyz/2018/04/19/nginx/2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Rakishly">
+<meta property="og:description" content="配置文件解释main （全局设置）， main 部分设置的指令将影响其它所有部分的设置；  http (http服务器设置)，http标准核心模块，http服务的相应配置 server （主机设置） 接收请求的服务器需要将不同的请求按规则转发到不同的后端服务器上，在 nginx 中我们可以通过构建虚拟主机（ server ）的概念来将这些不同的服务配置隔 离 location （URL匹配特定位置">
+<meta property="og:image" content="http://images.rakishly.xyz/nginx/2/1.png">
+<meta property="article:published_time" content="2018-04-19T12:55:53.000Z">
+<meta property="article:modified_time" content="2020-09-18T08:21:46.689Z">
+<meta property="article:author" content="Rakishly">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://images.rakishly.xyz/nginx/2/1.png">
+
+
+
+<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.rakishly.xyz/2018/04/19/nginx/2-配置文件/"/>
+
+
+
+
+
+  <title>nginx配置文件 | Rakishly</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rakishly</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2018/04/19/nginx/2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx配置文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T20:55:53+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="配置文件解释"><a href="#配置文件解释" class="headerlink" title="配置文件解释"></a>配置文件解释</h3><p><code>main</code> （全局设置）， main 部分设置的指令将影响其它所有部分的设置； </p>
+<p><code>http</code> (http服务器设置)，http标准核心模块，http服务的相应配置</p>
+<p><code>server</code> （主机设置） 接收请求的服务器需要将不同的请求按规则转发到不同的后端服务器上，在 nginx 中我们可以通过构建虚拟主机（ server ）的概念来将这些不同的服务配置隔 离</p>
+<p><code>location</code> （URL匹配特定位置后的设置）， location 部分用于匹配网页位置（比如，根目录“/”,“/images”,等等）, server 是对应一个域名进行的配置，而 location 是在一个域名下对更精细的路径进行配置.</p>
+<p><img src="http://images.rakishly.xyz/nginx/2/1.png" alt=""></p>
+<p>配置语法说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 配置文件由指令与指令块构成 </span><br><span class="line">2. 每条指令以;分号结尾，指令与参数间以空格符号分隔</span><br><span class="line">3. 指令块以｛｝大括号将多条指令组织在一起 </span><br><span class="line">4. 使用#符号添加注释，提高可读性 </span><br><span class="line">5. include语句允许组合多个配置文件以提升可维护性 </span><br><span class="line">6. 使用$符号使用变量 </span><br><span class="line">7. 部分指令的参数支持正则表达式</span><br></pre></td></tr></table></figure>
+
+<p>Nginx的各种指令以及配置繁多，有些配置可以在如下的链接 <a href="https://tengine.taobao.org/nginx_docs/cn/docs/" target="_blank" rel="noopener">https://tengine.taobao.org/nginx_docs/cn/docs/</a> 或者在官方文档上查看</p>
+<h4 id="配置块：-server"><a href="#配置块：-server" class="headerlink" title="配置块： server"></a>配置块： server</h4><p>由于IP地址的数量有限，因此经常存在多个主机域名对应着同一个IP地址的情况，这时在 nginx.conf 中就可以按照 server_name （对应用户请求中的主机域 名）并通过server块来定义虚拟主机，每个 server 块就是一个虚拟主机，它只处理与之相对应的主机域名请求。这样，一台服务器上的 Nginx 就能以不同的 方式处理访问不同主机域名的 HTTP 请求了 语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主机名称 </span><br><span class="line">语法： server_name name[...]; </span><br><span class="line">默认： server_name&quot;&quot;; </span><br><span class="line">配置块： server</span><br></pre></td></tr></table></figure>
+<p>虚拟主机名可以使用确切的名字，通配符，或者是正则表达式来定义,在开始处理一个 HTTP 请求时， Nginx 会取出 header 头中的 Host ，与每个 server 中的 server_name 进行匹配，以此决定到底由哪一个 server 块来处理这个请求。有可能一个 Host 与多个 server 块中的 server_name 都匹配，这时就会根据匹配 优先级来选择实际处理的 server 块。 </p>
+<blockquote>
+<p>注意：优先级问题，所导致的配置不生效</p>
+</blockquote>
+<p>server_name与Host的匹配优先级如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 首先选择所有字符串完全匹配的server_name，如 nginx.2367.com 。</span><br><span class="line">2. 其次选择通配符在前面的server_name，如 *.2367.com。 </span><br><span class="line">3. 再次选择通配符在后面的server_name，如nginx.2367.* 。 </span><br><span class="line">4. 最后选择使用正则表达式才匹配的server_name，如 ~^\.testweb\.com$ </span><br><span class="line"></span><br><span class="line">如果都不匹配 </span><br><span class="line">1. 优先选择listen配置项后有default或default_server的 </span><br><span class="line">2. 找到匹配listen端口的第一个server块</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置块-location"><a href="#配置块-location" class="headerlink" title="配置块: location"></a>配置块: location</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location </span><br><span class="line">语法： location[&#x3D;|~|~*|^~|@]&#x2F;uri&#x2F;&#123;...&#125; .</span><br><span class="line">配置块： server </span><br><span class="line">location会尝试根据用户请求中的URI来匹配上面的&#x2F;uri表达式，</span><br><span class="line">如果可以匹配，就选择 location&#123;&#125;块中的配置来处理用户请求。当然，匹配方式是多样的，下面介绍location的匹配 规则。</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>location表达式类型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">~ 表示执行一个正则匹配，区分大小写；</span><br><span class="line">~* 表示执行一个正则匹配，不区分大小写； </span><br><span class="line">^~ 表示普通字符匹配。使用前缀匹配。如果匹配成功，则不再匹配其他location； </span><br><span class="line">&#x3D; 进行普通字符精确匹配。也就是完全匹配；</span><br><span class="line">@ 它定义一个命名的 location，使用在内部定向时，例如 error_page, try_files</span><br></pre></td></tr></table></figure>
+
+<p><strong>优先级：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">等号类型（&#x3D;）的优先级最高。一旦匹配成功，则不再查找其他匹配项 </span><br><span class="line">前缀普通匹配(^~)优先级次之。不支持正则表达式。使用前缀匹配，如果有多个location匹配的话，则使用表达式最长的那个</span><br><span class="line">正则表达式类型（~ ~*）的优先级次之。一旦匹配成功，则不再查找其他匹配项 常规字符串匹配，如果有多个location匹配的话，则使用表达式最长的那个</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>(location =) &gt; (location 完整路径) &gt; (location ^~ 路径) &gt; (location <del>,</del>* 正则顺序) &gt; (location 部分起始路径)</p>
+</blockquote>
+<h4 id="文件路径的定义："><a href="#文件路径的定义：" class="headerlink" title="文件路径的定义："></a>文件路径的定义：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">以root方式设置资源路径 </span><br><span class="line"></span><br><span class="line">语法： root path; </span><br><span class="line">配置块： http、server、location、if </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">以alias方式设置资源路径 </span><br><span class="line"></span><br><span class="line">语法： alias path;</span><br><span class="line">配置块： location </span><br><span class="line">alias也是用来设置文件资源路径的，它与root的不同点主要在于如何解读紧跟location后面的uri参数</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意： location中使用root指令和alias指令的意义不同</p>
+</blockquote>
+<ul>
+<li>root，相当于追加在root目录后面 。比如访问的是 xxx/test=&gt;/www/test </li>
+<li>alias，相当于对location中的uri进行替换，比如访问的是 xxx/test，想要访问到/www/test就必须设置 alias /www/test</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/18/nginx/1-nginx%E4%B8%8Eapache%E5%AF%B9%E6%AF%94/" rel="next" title="nginx与apache对比">
+                <i class="fa fa-chevron-left"></i> nginx与apache对比
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/21/nginx/3-%E9%99%90%E6%B5%81%E6%A8%A1%E5%9D%97/" rel="prev" title="nginx限流模块">
+                nginx限流模块 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Rakishly</p>
+              <p class="site-description motion-element" itemprop="description">不求风骚惊天下，但求猥琐动世人</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Rakishly" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件解释"><span class="nav-number">1.</span> <span class="nav-text">配置文件解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置块：-server"><span class="nav-number">1.1.</span> <span class="nav-text">配置块： server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置块-location"><span class="nav-number">1.2.</span> <span class="nav-text">配置块: location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件路径的定义："><span class="nav-number">1.3.</span> <span class="nav-text">文件路径的定义：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rakishly</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -903,6 +903,694 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2018/04/24/nginx/4-IP%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/24/nginx/4-IP%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9D%97/" itemprop="url">nginx限流模块</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-24T21:01:05+08:00">
+                2018-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="IP访问控制模块"><a href="#IP访问控制模块" class="headerlink" title="IP访问控制模块"></a>IP访问控制模块</h3><p>官网：<a href="http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_access_module.html" target="_blank" rel="noopener">http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_access_module.html</a></p>
+<p>我们可以把一些ip或一些网段进行限制。默认是允许所有ip访问</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location &#x2F; &#123;</span><br><span class="line">    deny  192.168.1.1;</span><br><span class="line">    allow 192.168.1.0&#x2F;24;</span><br><span class="line">    allow 10.1.1.0&#x2F;16;</span><br><span class="line">    allow 2001:0db8::&#x2F;32;</span><br><span class="line">    deny  all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>规则按照顺序依次检测，直到匹配到第一条规则。 在这个例子里，IPv4的网络中只有 10.1.1.0/16 和 192.168.1.0/24允许访问，<br>但 192.168.1.1除外, 对于IPv6的网络， 只有2001:0db8::/32允许访问。 在规则很多的情况下，使用 ngx_http_geo_module 模块变量更合适。</p>
+</blockquote>
+<p><strong>allow 允许指定的网络地址访问</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">语法: allow address | CIDR | unix: | all; </span><br><span class="line">默认值: —</span><br><span class="line">区块: http, server, location, limit_except </span><br><span class="line">允许某个ip或者一个ip段访问</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>deny 拒绝指定的网络地址访问</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">语法: deny address | CIDR | unix: | all; </span><br><span class="line">默认值: — </span><br><span class="line">区块: http, server, location, limit_except</span><br></pre></td></tr></table></figure>
+
+<h4 id="ip黑白名单"><a href="#ip黑白名单" class="headerlink" title="ip黑白名单"></a>ip黑白名单</h4><p>连接限制跟请求限制，会对所有的ip进行限制，我们不希望自己的测试的ip,或者搜索引擎蜘蛛受到限制 </p>
+<p>根据上一篇的速率限制的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">limit_req_zone $binary_remote_addr zone&#x3D;testz:10m rate&#x3D;1r&#x2F;s; </span><br><span class="line">limit_conn_zone $binary_remote_addr zone&#x3D;addr:10m;</span><br></pre></td></tr></table></figure>
+
+<p>目前的情况是针对于所有的请求均会有做限制，而在业务中可能会存在这对于某一些ip是不做限制的需求；在nginx的配置中并不能直接对于变量编辑相应的逻辑 计算因此我们不得不需要换一个方式</p>
+<p><strong>ngx_http_geo_module</strong></p>
+<p><code>ngx_http_geo_module</code> 模块创建变量，并根据客户端IP地址对变量赋值</p>
+<p><a href="http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_geo_module.html" target="_blank" rel="noopener">http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_geo_module.html</a></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">geo $geo &#123;</span><br><span class="line">    default        0;</span><br><span class="line">    127.0.0.1&#x2F;32   2;</span><br><span class="line">    192.168.1.0&#x2F;24 1;</span><br><span class="line">    10.1.0.0&#x2F;16    1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">语法: geo [$address] $variable &#123; ... &#125; </span><br><span class="line">默认值: —</span><br><span class="line">上下文: http</span><br></pre></td></tr></table></figure>
+
+<p>其实这个操作就有点类似于枚举变量，会根据我们传递的参数然后匹配并返回相应的参数</p>
+<p>基础体验</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">   geo $whiteIpList &#123;</span><br><span class="line">       default        1;</span><br><span class="line">       192.168.169.139 0;</span><br><span class="line">       192.168.169.160 0;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   server &#123; </span><br><span class="line">   &#x2F;&#x2F; .. </span><br><span class="line">   location &#x2F;geo &#123; </span><br><span class="line">   return 200 &#39;$whiteIpList&#39;; </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>ip/whiteIp.conf</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">192.169.168.160 0; </span><br><span class="line">192.168.169.139 0;</span><br></pre></td></tr></table></figure>
+
+<p>访问的时候 160 和 139 这两台返回 0， 其他服务器返回1</p>
+<p><strong>ngx_http_map_module</strong></p>
+<p><code>ngx_http_map_module</code> 可以创建一些和另外变量相关联的变量。</p>
+<p><a href="http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener">http://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_map_module.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">语法: map string $variable &#123; ... &#125; </span><br><span class="line">默认值: — </span><br><span class="line">上下文: http</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">map $whiteIpList $limit_ip &#123; </span><br><span class="line">    0 &quot;&quot;; </span><br><span class="line">    1 $remote_addr; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后配合geo实现白名单的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    &#x2F;&#x2F; .. </span><br><span class="line">    limit_req_zone $limit_ip zone&#x3D;testz:10m rate&#x3D;1r&#x2F;s; </span><br><span class="line">    limit_conn_zone $limit_ip zone&#x3D;addr:10m; </span><br><span class="line">    </span><br><span class="line">    map $whiteIpList $limit_ip &#123; </span><br><span class="line">        0 &quot;&quot;; </span><br><span class="line">        1 $binary_remote_addr;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     server &#123; </span><br><span class="line">     </span><br><span class="line">        &#x2F;&#x2F; .. </span><br><span class="line">        </span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">            root html; </span><br><span class="line">            limit_conn addr 1; </span><br><span class="line">            limit_rate 10k; #限速为 100KB&#x2F;秒 </span><br><span class="line">            index index.html index.htm; </span><br><span class="line">            &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2018/04/21/nginx/3-%E9%99%90%E6%B5%81%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/21/nginx/3-%E9%99%90%E6%B5%81%E6%A8%A1%E5%9D%97/" itemprop="url">nginx限流模块</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-21T20:33:23+08:00">
+                2018-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="限流模块"><a href="#限流模块" class="headerlink" title="限流模块"></a>限流模块</h3><p>比如：抢购的场景，下载限速下就会有涉及运用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">限流：主要是当访问量达到一个限制量的时候可以选择以服务器为主要，而选择对用户访问请求的量做限制，对于超出限制的用户请求会采取丢弃或者延迟处理等 方式处理，来保证更多用户来访问处理。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>比如：某一服务器正常在高峰期上能支持的访问量是1w，但是突然某一时刻在访问量上突然暴增一下子超过3w,5w则可能会导致服务器宕机，这个时候我们 就可以通过设置最大的访问如1分钟访问8000次；</p>
+</blockquote>
+<p>也可以防止攻击（对同一个ip每秒访问多少次）如：30min/次 </p>
+<p>对应模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ngx_http_limit_conn_module 限制连接数 </span><br><span class="line">ngx_http_limit_reg_module  限制请求频率</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="ngx-http-limit-reg-module-限制请求频率"><a href="#ngx-http-limit-reg-module-限制请求频率" class="headerlink" title="ngx_http_limit_reg_module 限制请求频率"></a>ngx_http_limit_reg_module 限制请求频率</h4><p>官网：<a href="https://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener">https://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_limit_req_module.html</a></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    limit_req_zone $binary_remote_addr zone&#x3D;one:10m rate&#x3D;1r&#x2F;s;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        location &#x2F;search&#x2F; &#123;</span><br><span class="line">            limit_req zone&#x3D;one burst&#x3D;5;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">语法: limit_req_zone $variable zone&#x3D;name:size rate&#x3D;rate;</span><br><span class="line"></span><br><span class="line">$variable：变量 </span><br><span class="line">zone：代表当前限制的名称与存放大小 </span><br><span class="line">name：名称 </span><br><span class="line">size：存放客户端信息的大小 </span><br><span class="line">rate：表示速率 默认值: none </span><br><span class="line">上下文: http</span><br><span class="line"></span><br><span class="line">语法: limit_req zone&#x3D;name [burst&#x3D;number] [nodelay]; </span><br><span class="line"> </span><br><span class="line">Zone&#x3D;one 表示设置了名为“one”，大小为10兆字节，也可以理解为设置的限流名为one rate&#x3D;10r&#x2F;s的意思是允许1秒钟不超过10个请求 使用$binary_remote_addr【这是一个二进制的信息记录 $remote_addr（非二进制的）】（nginx本身存在的，保存客户端的ip地址）变量，可以将每条状态记录的 大小减少到64个字节，这样1M的内存可以保存大约1万6千个64字节的记录。如果限制域的存储空间耗尽了，对于后续所有请求，服务器都会返回 503 (Service Temporarily Unavailable)错误。</span><br><span class="line">速度可以设置为每秒处理请求数和每分钟处理请求数，其值必须是整数，所以如果你需要指定每秒处理少于1个的请求，2秒处理一个请求，可以使用 “30r&#x2F;m”。</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="ngx-http-limit-conn-module-限制请求连接数"><a href="#ngx-http-limit-conn-module-限制请求连接数" class="headerlink" title="ngx_http_limit_conn_module 限制请求连接数"></a>ngx_http_limit_conn_module 限制请求连接数</h4><p>用于限制每个已定义键的连接数特别是来自单个IP地址的连接数。并不是所有的连接都被计算在内。只有当服务器处理了一个请求，并且整个请求头已经被读取 时，才会计算连接。</p>
+<p>官网：<a href="https://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_limit_conn_module.html" target="_blank" rel="noopener">https://tengine.taobao.org/nginx_docs/cn/docs/http/ngx_http_limit_conn_module.html</a></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    limit_conn_zone $binary_remote_addr zone&#x3D;addr:10m;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        location &#x2F;download&#x2F; &#123;</span><br><span class="line">            limit_conn addr 1;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">语法: limit_conn_zone $binary_remote_addr zone&#x3D;addr:10m; </span><br><span class="line">默认值: none </span><br><span class="line">配置段: http </span><br><span class="line">例子：limit_conn_zone $binary_remote_addr zone&#x3D;addr:10m; </span><br><span class="line">说明：区域名称为addr，大小为10m，键值是客户端IP。 </span><br><span class="line">如果限制域的存储空间耗尽了，对于后续所有请求，服务器都会返回 503 (Service Temporarily Unavailable)错误。</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载限速"><a href="#下载限速" class="headerlink" title="下载限速"></a>下载限速</h4><p>关于很多下文件均会有点一个操作就是会下载限速</p>
+<p>操作实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    limit_conn_zone $binary_remote_addr zone&#x3D;addr:10m;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        location &#x2F;download&#x2F; &#123;</span><br><span class="line">        </span><br><span class="line">            autoindex on;</span><br><span class="line">        </span><br><span class="line">            # 是限制每个IP只能发起1个连接 （addr 要跟 limit_conn_zone 的变量对应）</span><br><span class="line">            limit_conn addr 1;</span><br><span class="line">            </span><br><span class="line">            limit_rate 10k; #限速为 10KB&#x2F;秒</span><br><span class="line">            </span><br><span class="line">            root &#x2F;xxx;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>限制算法有两种：令牌桶和漏桶，有兴趣的同学可以找相关文档看看。 </p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2018/04/19/nginx/2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/19/nginx/2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" itemprop="url">nginx配置文件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T20:55:53+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="配置文件解释"><a href="#配置文件解释" class="headerlink" title="配置文件解释"></a>配置文件解释</h3><p><code>main</code> （全局设置）， main 部分设置的指令将影响其它所有部分的设置； </p>
+<p><code>http</code> (http服务器设置)，http标准核心模块，http服务的相应配置</p>
+<p><code>server</code> （主机设置） 接收请求的服务器需要将不同的请求按规则转发到不同的后端服务器上，在 nginx 中我们可以通过构建虚拟主机（ server ）的概念来将这些不同的服务配置隔 离</p>
+<p><code>location</code> （URL匹配特定位置后的设置）， location 部分用于匹配网页位置（比如，根目录“/”,“/images”,等等）, server 是对应一个域名进行的配置，而 location 是在一个域名下对更精细的路径进行配置.</p>
+<p><img src="http://images.rakishly.xyz/nginx/2/1.png" alt=""></p>
+<p>配置语法说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 配置文件由指令与指令块构成 </span><br><span class="line">2. 每条指令以;分号结尾，指令与参数间以空格符号分隔</span><br><span class="line">3. 指令块以｛｝大括号将多条指令组织在一起 </span><br><span class="line">4. 使用#符号添加注释，提高可读性 </span><br><span class="line">5. include语句允许组合多个配置文件以提升可维护性 </span><br><span class="line">6. 使用$符号使用变量 </span><br><span class="line">7. 部分指令的参数支持正则表达式</span><br></pre></td></tr></table></figure>
+
+<p>Nginx的各种指令以及配置繁多，有些配置可以在如下的链接 <a href="https://tengine.taobao.org/nginx_docs/cn/docs/" target="_blank" rel="noopener">https://tengine.taobao.org/nginx_docs/cn/docs/</a> 或者在官方文档上查看</p>
+<h4 id="配置块：-server"><a href="#配置块：-server" class="headerlink" title="配置块： server"></a>配置块： server</h4><p>由于IP地址的数量有限，因此经常存在多个主机域名对应着同一个IP地址的情况，这时在 nginx.conf 中就可以按照 server_name （对应用户请求中的主机域 名）并通过server块来定义虚拟主机，每个 server 块就是一个虚拟主机，它只处理与之相对应的主机域名请求。这样，一台服务器上的 Nginx 就能以不同的 方式处理访问不同主机域名的 HTTP 请求了 语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主机名称 </span><br><span class="line">语法： server_name name[...]; </span><br><span class="line">默认： server_name&quot;&quot;; </span><br><span class="line">配置块： server</span><br></pre></td></tr></table></figure>
+<p>虚拟主机名可以使用确切的名字，通配符，或者是正则表达式来定义,在开始处理一个 HTTP 请求时， Nginx 会取出 header 头中的 Host ，与每个 server 中的 server_name 进行匹配，以此决定到底由哪一个 server 块来处理这个请求。有可能一个 Host 与多个 server 块中的 server_name 都匹配，这时就会根据匹配 优先级来选择实际处理的 server 块。 </p>
+<blockquote>
+<p>注意：优先级问题，所导致的配置不生效</p>
+</blockquote>
+<p>server_name与Host的匹配优先级如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 首先选择所有字符串完全匹配的server_name，如 nginx.2367.com 。</span><br><span class="line">2. 其次选择通配符在前面的server_name，如 *.2367.com。 </span><br><span class="line">3. 再次选择通配符在后面的server_name，如nginx.2367.* 。 </span><br><span class="line">4. 最后选择使用正则表达式才匹配的server_name，如 ~^\.testweb\.com$ </span><br><span class="line"></span><br><span class="line">如果都不匹配 </span><br><span class="line">1. 优先选择listen配置项后有default或default_server的 </span><br><span class="line">2. 找到匹配listen端口的第一个server块</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置块-location"><a href="#配置块-location" class="headerlink" title="配置块: location"></a>配置块: location</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location </span><br><span class="line">语法： location[&#x3D;|~|~*|^~|@]&#x2F;uri&#x2F;&#123;...&#125; .</span><br><span class="line">配置块： server </span><br><span class="line">location会尝试根据用户请求中的URI来匹配上面的&#x2F;uri表达式，</span><br><span class="line">如果可以匹配，就选择 location&#123;&#125;块中的配置来处理用户请求。当然，匹配方式是多样的，下面介绍location的匹配 规则。</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>location表达式类型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">~ 表示执行一个正则匹配，区分大小写；</span><br><span class="line">~* 表示执行一个正则匹配，不区分大小写； </span><br><span class="line">^~ 表示普通字符匹配。使用前缀匹配。如果匹配成功，则不再匹配其他location； </span><br><span class="line">&#x3D; 进行普通字符精确匹配。也就是完全匹配；</span><br><span class="line">@ 它定义一个命名的 location，使用在内部定向时，例如 error_page, try_files</span><br></pre></td></tr></table></figure>
+
+<p><strong>优先级：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">等号类型（&#x3D;）的优先级最高。一旦匹配成功，则不再查找其他匹配项 </span><br><span class="line">前缀普通匹配(^~)优先级次之。不支持正则表达式。使用前缀匹配，如果有多个location匹配的话，则使用表达式最长的那个</span><br><span class="line">正则表达式类型（~ ~*）的优先级次之。一旦匹配成功，则不再查找其他匹配项 常规字符串匹配，如果有多个location匹配的话，则使用表达式最长的那个</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>(location =) &gt; (location 完整路径) &gt; (location ^~ 路径) &gt; (location <del>,</del>* 正则顺序) &gt; (location 部分起始路径)</p>
+</blockquote>
+<h4 id="文件路径的定义："><a href="#文件路径的定义：" class="headerlink" title="文件路径的定义："></a>文件路径的定义：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">以root方式设置资源路径 </span><br><span class="line"></span><br><span class="line">语法： root path; </span><br><span class="line">配置块： http、server、location、if </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">以alias方式设置资源路径 </span><br><span class="line"></span><br><span class="line">语法： alias path;</span><br><span class="line">配置块： location </span><br><span class="line">alias也是用来设置文件资源路径的，它与root的不同点主要在于如何解读紧跟location后面的uri参数</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意： location中使用root指令和alias指令的意义不同</p>
+</blockquote>
+<ul>
+<li>root，相当于追加在root目录后面 。比如访问的是 xxx/test=&gt;/www/test </li>
+<li>alias，相当于对location中的uri进行替换，比如访问的是 xxx/test，想要访问到/www/test就必须设置 alias /www/test</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.rakishly.xyz/2018/04/18/nginx/1-nginx%E4%B8%8Eapache%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rakishly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rakishly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/18/nginx/1-nginx%E4%B8%8Eapache%E5%AF%B9%E6%AF%94/" itemprop="url">nginx与apache对比</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-18T13:48:42+08:00">
+                2018-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="nginx与apache对比"><a href="#nginx与apache对比" class="headerlink" title="nginx与apache对比"></a>nginx与apache对比</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">nginx </span><br><span class="line"></span><br><span class="line">1. 轻量级，采用 C 进行编写，同样的 web 服务，会占用更少的内存及资源 </span><br><span class="line"></span><br><span class="line">2. 抗并发，nginx 以 多进程io多路复用 作为开发模型，处理请求是异步非阻塞的，负载能力比 apache 高很多，而 apache 则是多进程同步阻塞型的。在高并发下 nginx 能 保持低资源低消耗高性能 ，而 apache 在 PHP 处理慢或者前端压力很大的情况下，很容易出现进程数飙升，从而拒绝服务的现象。 </span><br><span class="line"></span><br><span class="line">3. nginx 处理静态文件好，静态处理性能比 apache 高三倍以上 </span><br><span class="line"></span><br><span class="line">4. nginx 的设计高度模块化，编写模块相对简单 </span><br><span class="line"></span><br><span class="line">5. nginx 配置简洁，正则配置让很多事情变得简单，而且改完配置能使用 -t 测试配置有没有问题，apache 配置复杂 ，重启的时候发现配置出错了，会很崩溃 </span><br><span class="line"></span><br><span class="line">6. nginx 作为负载均衡服务器，支持 </span><br><span class="line"></span><br><span class="line">7 层负载均衡 7. nginx 本身就是一个反向代理服务器，而且可以作为非常优秀的邮件代理服务器 </span><br><span class="line"></span><br><span class="line">8. 启动特别容易, 并且几乎可以做到 7*24 不间断运行，即使运行数个月也不需要重新启动，还能够不间断服务的情况下进行软件版本的升级 </span><br><span class="line"></span><br><span class="line">9. 社区活跃，各种高性能模块出品迅速</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apache</span><br><span class="line"></span><br><span class="line">1. apache 的 rewrite 比 nginx 强大，在 rewrite 频繁的情况下，用 apache </span><br><span class="line"></span><br><span class="line">2. apache 发展到现在，模块超多，基本想到的都可以找到 </span><br><span class="line"></span><br><span class="line">3. apache 更为成熟，少 bug ，nginx 的 bug 相对较多 </span><br><span class="line"></span><br><span class="line">4. apache 超稳定 </span><br><span class="line"></span><br><span class="line">5. apache 对 PHP 支持比较简单，nginx 需要配合其他后端用 </span><br><span class="line"></span><br><span class="line">6. apache 在处理动态请求有优势，nginx 在这方面是鸡肋，一般动态请求要 apache 去做，nginx 适合静态和反向。 </span><br><span class="line"></span><br><span class="line">7. apache 仍然是目前的主流，拥有丰富的特性，成熟的技术和开发社区</span><br></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两者最核心的区别在于 apache 是同步多进程模型，一个连接对应一个进程，而 nginx 是异步的，多个连接（万级别）可以对应一个进程 一般来说，需要性能的 web 服务，用 nginx 。如果不需要性能只求稳定，更考虑 apache ，后者的各种功能模块实现得比前者，例如 ssl 的模块就比前者好，可配 置项多。epoll(freebsd 上是 kqueue ) 网络 IO 模型是 nginx 处理性能高的根本理由，但并不是所有的情况下都是 epoll 大获全胜的，如果本身提供静态服务的就只 有寥寥几个文件，apache 的 select 模型或许比 epoll 更高性能。当然，这只是根据网络 IO 模型的原理作的一个假设，真正的应用还是需要实测了再说的。</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -953,7 +1641,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -964,7 +1652,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -975,7 +1663,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
